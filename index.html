@@ -26,7 +26,7 @@
 <body class="bg-ivory text-ink">
     <!-- Header -->
     <header class="fixed top-0 w-full z-50 bg-ivory border-b border-black/5">
-        <nav class="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
+        <nav class="w-full max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-gold rounded flex items-center justify-center">
                     <i data-lucide="navigation" class="text-ink w-5 h-5"></i>
@@ -327,26 +327,24 @@
         // Mobile menu toggle logic
         const menuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = menuBtn.querySelector('i');
+
+        function setMenuIcon(name) {
+            const icon = menuBtn.querySelector('[data-lucide]');
+            if (icon) icon.setAttribute('data-lucide', name);
+            lucide.createIcons();
+        }
 
         menuBtn.addEventListener('click', () => {
             const isOpen = mobileMenu.classList.contains('active');
-            if (isOpen) {
-                mobileMenu.classList.remove('active');
-                menuIcon.setAttribute('data-lucide', 'menu');
-            } else {
-                mobileMenu.classList.add('active');
-                menuIcon.setAttribute('data-lucide', 'x');
-            }
-            lucide.createIcons();
+            mobileMenu.classList.toggle('active');
+            setMenuIcon(isOpen ? 'menu' : 'x');
         });
 
         // Close menu when clicking a link
         document.querySelectorAll('#mobile-menu .nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.remove('active');
-                menuIcon.setAttribute('data-lucide', 'menu');
-                lucide.createIcons();
+                setMenuIcon('menu');
             });
         });
     </script>
