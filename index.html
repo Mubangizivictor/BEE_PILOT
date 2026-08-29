@@ -4,55 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeePilot | Reliable Private Rides from Mbarara</title>
+    <meta name="description" content="Premium private rides from Mbarara—and beyond. Airport transfers, special hire, family travel and business trips.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        :root {
-            --charcoal: #101417;
-            --midnight: #071526;
-            --honey-gold: #E9B536;
-            --ivory: #F8F6F1;
-            --sage: #79A985;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--ivory);
-            color: var(--charcoal);
-        }
-        .bg-honey { background-color: var(--honey-gold); }
-        .text-honey { color: var(--honey-gold); }
-        .bg-charcoal { background-color: var(--charcoal); }
-        .bg-midnight { background-color: var(--midnight); }
-        .btn-primary {
-            background-color: var(--honey-gold);
-            color: var(--charcoal);
-            font-weight: 700;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(233, 181, 54, 0.3);
-        }
-        .glass-nav {
-            background: rgba(248, 246, 241, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(16, 20, 23, 0.05);
+        .hero-gradient {
+            background: radial-gradient(circle at 70% 30%, rgba(233, 181, 54, 0.15) 0%, transparent 50%);
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- Header -->
+<body class="hero-gradient">
+    <!-- Sticky Header -->
     <header class="fixed top-0 w-full z-50 glass-nav">
         <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-honey rounded-xl flex items-center justify-center">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-honey rounded-xl flex items-center justify-center transition-transform group-hover:scale-110">
                     <i data-lucide="navigation" class="text-charcoal w-6 h-6"></i>
                 </div>
                 <span class="text-2xl font-black tracking-tighter">BEEPILOT</span>
-            </div>
+            </a>
 
             <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
                 <a href="#services" class="hover:text-honey transition-colors">Services</a>
@@ -61,196 +33,305 @@
                 <a href="book.html" class="btn-primary">Book a ride</a>
             </div>
 
-            <button class="md:hidden">
+            <button class="md:hidden p-2" id="mobile-menu-btn">
                 <i data-lucide="menu"></i>
             </button>
         </nav>
     </header>
 
-    <!-- Hero -->
-    <main class="pt-32 pb-20 px-6">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+    <!-- Mobile Nav -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-[60] flex flex-col p-8 md:hidden translate-x-full transition-transform duration-300">
+        <div class="flex justify-between items-center mb-12">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-honey rounded-lg flex items-center justify-center">
+                    <i data-lucide="navigation" class="text-charcoal w-5 h-5"></i>
+                </div>
+                <span class="text-xl font-black tracking-tighter">BEEPILOT</span>
+            </div>
+            <button id="close-menu-btn"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex flex-col gap-6 text-xl font-bold">
+            <a href="#services" class="mobile-link">Services</a>
+            <a href="#how-it-works" class="mobile-link">How it works</a>
+            <a href="#safety" class="mobile-link">Safety</a>
+            <a href="book.html" class="btn-primary mt-4">Book a ride</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-40 pb-20 px-6">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
             <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-honey mb-4 block">Private Rides • Professional Service</span>
-                <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-honey/10 text-honey text-xs font-bold uppercase tracking-wider mb-6">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-honey opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-honey"></span>
+                    </span>
+                    Private rides • Professional service
+                </div>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black leading-[0.9] mb-8">
                     Reliable private rides from <span class="text-honey">Mbarara</span>—and beyond.
                 </h1>
-                <p class="text-lg text-gray-600 mb-8 max-w-lg">
-                    Travel for business, family, and special occasions with trusted local drivers. Airport transfers, special hire, and intercity trips.
+                <p class="text-lg md:text-xl text-gray-500 mb-10 max-w-lg leading-relaxed">
+                    Airport transfers, special hire, family travel and business trips with trusted local drivers.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="book.html" class="btn-primary flex items-center justify-center gap-2">
-                        Book a ride <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <a href="book.html" class="btn-primary py-4 px-8 text-lg shadow-xl shadow-honey/20">
+                        Book a ride <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
                     </a>
-                    <a href="https://wa.me/256700000000" class="px-6 py-3 border-2 border-charcoal rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-charcoal hover:text-white transition-all">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i> Chat on WhatsApp
+                    <a href="https://wa.me/256700000000" class="btn-outline py-4 px-8 text-lg">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i> Chat on WhatsApp
                     </a>
                 </div>
             </div>
-            <div class="relative">
-                <div class="aspect-square bg-midnight rounded-[2.5rem] overflow-hidden relative shadow-2xl">
-                    <!-- Mock map/car visual -->
-                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--honey-gold)_0%,_transparent_70%)]"></div>
-                    <div class="absolute bottom-10 left-10 bg-white p-6 rounded-2xl shadow-xl max-w-xs">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 bg-sage/20 text-sage rounded-full flex items-center justify-center">
-                                <i data-lucide="check-circle-2"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold">Premium Saloon</p>
-                                <p class="text-xs text-gray-500">Available in Mbarara</p>
-                            </div>
+            <div class="relative hidden lg:block">
+                <div class="aspect-[4/5] bg-midnight rounded-[3rem] overflow-hidden relative shadow-2xl rotate-2">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-50"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-midnight via-transparent to-transparent"></div>
+
+                    <div class="absolute bottom-8 left-8 right-8 bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-3xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-white font-bold">Mbarara to Entebbe</span>
+                            <span class="bg-honey text-charcoal text-xs font-black px-2 py-1 rounded">FIXED FARE</span>
                         </div>
-                        <div class="space-y-2">
-                            <div class="h-2 bg-gray-100 rounded-full w-full"></div>
-                            <div class="h-2 bg-gray-100 rounded-full w-3/4"></div>
+                        <div class="flex items-end justify-between">
+                            <div>
+                                <p class="text-white/60 text-xs uppercase font-bold tracking-widest mb-1">Estimated Time</p>
+                                <p class="text-white text-xl font-bold">4h 30m</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-white/60 text-xs uppercase font-bold tracking-widest mb-1">Total Fare</p>
+                                <p class="text-honey text-2xl font-black">UGX 230,000</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!-- Decorative elements -->
+                <div class="absolute -top-6 -right-6 w-24 h-24 bg-honey/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-sage/10 rounded-full blur-3xl"></div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <!-- Services -->
-    <section id="services" class="py-20 bg-white">
+    <!-- Services Section -->
+    <section id="services" class="py-32 bg-white">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl font-black mb-12">Our services</h2>
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-5xl font-black mb-4">Our services</h2>
+                <div class="w-20 h-2 bg-honey"></div>
+            </div>
+
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="p-8 rounded-3xl bg-ivory border border-gray-100 hover:border-honey transition-all group">
-                    <div class="w-14 h-14 bg-charcoal text-honey rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i data-lucide="car"></i>
+                <!-- Service Card -->
+                <div class="card hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group">
+                    <div class="w-16 h-16 bg-charcoal text-honey rounded-2xl flex items-center justify-center mb-8 group-hover:bg-honey group-hover:text-charcoal transition-colors">
+                        <i data-lucide="map-pinned" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">City & Intercity Rides</h3>
-                    <p class="text-gray-500 text-sm mb-6">Comfortable private rides across Mbarara and beyond for your daily needs.</p>
-                    <a href="book.html?service=city" class="text-sm font-bold flex items-center gap-2 group-hover:text-honey">
-                        Book Now <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    <h3 class="text-2xl font-black mb-4">City & Intercity Rides</h3>
+                    <p class="text-gray-500 mb-8 leading-relaxed">Comfortable private rides across Mbarara and surrounding towns. Punctual door-to-door service.</p>
+                    <a href="book.html?service=city" class="inline-flex items-center gap-2 font-bold group-hover:text-honey">
+                        Book this service <i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
                     </a>
                 </div>
 
-                <div class="p-8 rounded-3xl bg-ivory border border-gray-100 hover:border-honey transition-all group">
-                    <div class="w-14 h-14 bg-charcoal text-honey rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i data-lucide="plane"></i>
+                <div class="card hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group border-honey/30">
+                    <div class="w-16 h-16 bg-charcoal text-honey rounded-2xl flex items-center justify-center mb-8 group-hover:bg-honey group-hover:text-charcoal transition-colors">
+                        <i data-lucide="plane-takeoff" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Airport Transfers</h3>
-                    <p class="text-gray-500 text-sm mb-6">On-time pickups and drop-offs for stress-free travel to Entebbe or local strips.</p>
-                    <a href="book.html?service=airport" class="text-sm font-bold flex items-center gap-2 group-hover:text-honey">
-                        Book Now <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    <h3 class="text-2xl font-black mb-4">Airport Transfers</h3>
+                    <p class="text-gray-500 mb-8 leading-relaxed">Direct, stress-free transfers to Entebbe Airport. We track your flight and wait for you.</p>
+                    <a href="book.html?service=airport" class="inline-flex items-center gap-2 font-bold group-hover:text-honey">
+                        Book this service <i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
                     </a>
                 </div>
 
-                <div class="p-8 rounded-3xl bg-ivory border border-gray-100 hover:border-honey transition-all group">
-                    <div class="w-14 h-14 bg-charcoal text-honey rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i data-lucide="award"></i>
+                <div class="card hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group">
+                    <div class="w-16 h-16 bg-charcoal text-honey rounded-2xl flex items-center justify-center mb-8 group-hover:bg-honey group-hover:text-charcoal transition-colors">
+                        <i data-lucide="gem" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Special Hire</h3>
-                    <p class="text-gray-500 text-sm mb-6">Weddings, events, and bespoke transport solutions with dedicated drivers.</p>
-                    <a href="book.html?service=special" class="text-sm font-bold flex items-center gap-2 group-hover:text-honey">
-                        Book Now <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    <h3 class="text-2xl font-black mb-4">Special Hire</h3>
+                    <p class="text-gray-500 mb-8 leading-relaxed">Weddings, business delegations, and full-day event transport with professional drivers.</p>
+                    <a href="book.html?service=special" class="inline-flex items-center gap-2 font-bold group-hover:text-honey">
+                        Book this service <i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Safety -->
-    <section id="safety" class="py-20">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-            <div class="grid grid-cols-2 gap-4">
-                <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-100">
-                    <i data-lucide="shield-check" class="text-sage w-8 h-8 mb-4"></i>
-                    <h4 class="font-bold mb-2">Vetted Drivers</h4>
-                    <p class="text-xs text-gray-500">Professional, punctual, and highly experienced.</p>
+    <!-- How it works -->
+    <section id="how-it-works" class="py-32 bg-ivory">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-black text-center mb-20">How booking works</h2>
+            <div class="grid md:grid-cols-3 gap-12 relative">
+                <!-- Connector lines for desktop -->
+                <div class="hidden md:block absolute top-1/4 left-1/4 right-1/4 h-0.5 border-t-2 border-dashed border-gray-300 -z-10"></div>
+
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg text-2xl font-black">1</div>
+                    <h4 class="text-xl font-bold mb-4">Fill Trip Details</h4>
+                    <p class="text-gray-500">Enter your pickup, destination, and preferred time on our booking page.</p>
                 </div>
-                <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-100 mt-8">
-                    <i data-lucide="sparkles" class="text-honey w-8 h-8 mb-4"></i>
-                    <h4 class="font-bold mb-2">Clean Vehicles</h4>
-                    <p class="text-xs text-gray-500">Well-maintained cars for a premium experience.</p>
+
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg text-2xl font-black">2</div>
+                    <h4 class="text-xl font-bold mb-4">Get Fixed Quote</h4>
+                    <p class="text-gray-500">Review your estimated fare and confirm the booking via WhatsApp.</p>
                 </div>
-                <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-100">
-                    <i data-lucide="dollar-sign" class="text-blue-500 w-8 h-8 mb-4"></i>
-                    <h4 class="font-bold mb-2">Fixed Pricing</h4>
-                    <p class="text-xs text-gray-500">No hidden charges. Know your fare upfront.</p>
+
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-honey rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg text-2xl font-black">3</div>
+                    <h4 class="text-xl font-bold mb-4">Confirm & Pay</h4>
+                    <p class="text-gray-500">Pay the deposit via MoMo or Bank to secure your premium ride.</p>
                 </div>
-                <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-100 mt-8">
-                    <i data-lucide="clock" class="text-purple-500 w-8 h-8 mb-4"></i>
-                    <h4 class="font-bold mb-2">Reliable</h4>
-                    <p class="text-xs text-gray-500">Always on time, every time. Discretion guaranteed.</p>
-                </div>
-            </div>
-            <div>
-                <h2 class="text-4xl font-black mb-6">Safety. Reliability. Discretion.</h2>
-                <p class="text-gray-600 mb-8">
-                    At BeePilot, we prioritize your peace of mind. Every journey is tracked, and our drivers are hand-picked to ensure the highest standards of safety and professionalism.
-                </p>
-                <ul class="space-y-4">
-                    <li class="flex items-center gap-3 font-semibold">
-                        <i data-lucide="check" class="text-sage"></i> 24/7 WhatsApp Support
-                    </li>
-                    <li class="flex items-center gap-3 font-semibold">
-                        <i data-lucide="check" class="text-sage"></i> Detailed Booking Confirmation
-                    </li>
-                    <li class="flex items-center gap-3 font-semibold">
-                        <i data-lucide="check" class="text-sage"></i> Verified Payment Receipts
-                    </li>
-                </ul>
             </div>
         </div>
+    </section>
+
+    <!-- Safety Banner -->
+    <section id="safety" class="py-32 bg-charcoal text-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-black mb-8 leading-tight">Safety, Reliability, and Discretion.</h2>
+                    <p class="text-gray-400 text-lg mb-12">We go beyond just driving. We provide a premium experience where your comfort and security come first.</p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="shield-check" class="text-sage"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg">Clean, well-maintained vehicles</h5>
+                                <p class="text-gray-500">Regular inspections to ensure every car is in top condition.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="banknote" class="text-honey"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg">Clear upfront pricing</h5>
+                                <p class="text-gray-500">No surprises. The price we quote is the price you pay.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="user-check" class="text-blue-400"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg">Professional and punctual service</h5>
+                                <h5 class="font-bold text-lg">Professional and punctual service</h5>
+                                <p class="text-gray-500">Our drivers are vetted, experienced, and respect your time.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-midnight to-charcoal p-1 rounded-[3rem]">
+                        <div class="bg-charcoal rounded-[2.9rem] p-8 md:p-12 border border-white/10">
+                            <div class="text-honey text-5xl font-black mb-4">100%</div>
+                            <div class="text-2xl font-bold mb-6">Discreet & Private</div>
+                            <p class="text-gray-400 leading-relaxed mb-8">
+                                Whether you're a business traveler needing to work on the go or a family wanting a quiet trip, we respect your privacy.
+                            </p>
+                            <a href="book.html" class="btn-primary w-full">Book Your Safe Ride</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Background accents -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-honey/5 rounded-full blur-3xl"></div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-charcoal text-white py-20 px-6">
+    <footer class="bg-charcoal text-white pt-32 pb-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
+            <div class="grid md:grid-cols-4 gap-16 mb-24">
                 <div class="col-span-2">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-8 h-8 bg-honey rounded-lg flex items-center justify-center">
-                            <i data-lucide="navigation" class="text-charcoal w-5 h-5"></i>
+                    <a href="#" class="flex items-center gap-2 mb-8">
+                        <div class="w-10 h-10 bg-honey rounded-xl flex items-center justify-center">
+                            <i data-lucide="navigation" class="text-charcoal w-6 h-6"></i>
                         </div>
-                        <span class="text-xl font-black tracking-tighter">BEEPILOT</span>
-                    </div>
-                    <p class="text-gray-400 max-w-sm mb-6">
-                        Premium private rides for Mbarara and beyond. Safe, punctual, and professional transport solutions.
+                        <span class="text-3xl font-black tracking-tighter">BEEPILOT</span>
+                    </a>
+                    <p class="text-gray-500 text-lg max-w-sm mb-10">
+                        Reliable private rides from Mbarara—and beyond. Premium service for those who value time and comfort.
                     </p>
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-honey hover:text-charcoal transition-all">
-                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-honey hover:text-charcoal transition-all">
+                            <i data-lucide="facebook"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-honey hover:text-charcoal transition-all">
-                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-honey hover:text-charcoal transition-all">
+                            <i data-lucide="twitter"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-honey hover:text-charcoal transition-all">
+                            <i data-lucide="instagram"></i>
                         </a>
                     </div>
                 </div>
+
                 <div>
-                    <h5 class="font-bold mb-6">Services</h5>
-                    <ul class="space-y-4 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-white">City Rides</a></li>
-                        <li><a href="#" class="hover:text-white">Airport Transfers</a></li>
-                        <li><a href="#" class="hover:text-white">Special Hire</a></li>
-                        <li><a href="#" class="hover:text-white">Corporate Travel</a></li>
+                    <h6 class="font-bold text-lg mb-8">Service Area</h6>
+                    <ul class="space-y-4 text-gray-500">
+                        <li>Mbarara City</li>
+                        <li>Kampala & Entebbe</li>
+                        <li>Fort Portal</li>
+                        <li>Kabale & Kisoro</li>
+                        <li>Across Western Uganda</li>
                     </ul>
                 </div>
+
                 <div>
-                    <h5 class="font-bold mb-6">Contact</h5>
-                    <ul class="space-y-4 text-gray-400 text-sm">
-                        <li class="flex items-center gap-3"><i data-lucide="phone" class="w-4 h-4"></i> +256 700 000 000</li>
-                        <li class="flex items-center gap-3"><i data-lucide="message-square" class="w-4 h-4"></i> WhatsApp Support</li>
-                        <li class="flex items-center gap-3"><i data-lucide="mail" class="w-4 h-4"></i> bookings@victorbee.com</li>
-                        <li class="flex items-center gap-3"><i data-lucide="map-pin" class="w-4 h-4"></i> Mbarara, Uganda</li>
+                    <h6 class="font-bold text-lg mb-8">Contact Us</h6>
+                    <ul class="space-y-6 text-gray-500">
+                        <li class="flex items-center gap-4">
+                            <i data-lucide="phone" class="text-honey w-5 h-5"></i>
+                            <span>+256 700 000 000</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <i data-lucide="message-circle" class="text-honey w-5 h-5"></i>
+                            <span>WhatsApp Support</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <i data-lucide="mail" class="text-honey w-5 h-5"></i>
+                            <span>bookings@victorbee.com</span>
+                        </li>
                     </ul>
                 </div>
             </div>
-            <div class="pt-12 border-t border-white/10 flex flex-col md:row justify-between items-center gap-6 text-sm text-gray-500">
-                <p>&copy; 2024 BeePilot. All rights reserved.</p>
-                <div class="flex gap-8">
-                    <a href="#" class="hover:text-white">Privacy Policy</a>
-                    <a href="#" class="hover:text-white">Terms of Service</a>
+
+            <div class="pt-12 border-t border-white/5 flex flex-col md:row justify-between items-center gap-8 text-sm text-gray-600">
+                <p>&copy; 2024 BeePilot by VictorBee. All rights reserved.</p>
+                <div class="flex gap-12">
+                    <a href="admin/login.html" class="hover:text-honey">Owner Login</a>
+                    <a href="#" class="hover:text-honey">Privacy Policy</a>
+                    <a href="#" class="hover:text-honey">Terms</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script>
+    <script type="module">
         lucide.createIcons();
+
+        // Mobile menu logic
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+
+        const closeMenu = () => {
+            mobileMenu.classList.add('translate-x-full');
+        };
+
+        closeMenuBtn.addEventListener('click', closeMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
     </script>
 </body>
 </html>
