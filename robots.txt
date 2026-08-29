@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://beepilot.victorbee.com/sitemap.xml
+Sitemap: https://beepilot.ug/sitemap.xml

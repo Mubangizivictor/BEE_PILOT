@@ -54,6 +54,11 @@ h1, h2, h3, .hero-font {
     font-family: 'Playfair Display', serif;
 }
 
+h2 {
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1.2;
+}
+
 /* Reusable Components - Now using Semantic Variables */
 
 .btn-primary {
@@ -163,8 +168,9 @@ h1, h2, h3, .hero-font {
 .nav-link {
     color: var(--text-primary);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
     transition: var(--transition);
 }
 
@@ -175,16 +181,11 @@ h1, h2, h3, .hero-font {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 2rem;
 }
 
 .section-padding {
-    padding: 6rem 0;
-}
-
-@media (max-width: 640px) {
-    .section-padding { padding: 4rem 0; }
-    .container { padding: 0 1.25rem; }
+    padding: clamp(3rem, 8vw, 6rem) 0;
 }
 
 /* Mobile Menu */
@@ -307,21 +308,19 @@ h1, h2, h3, .hero-font {
 
 /* Hero & Quote Form Refinements */
 .hero-section {
-    min-height: 650px;
-    height: 80vh;
-    max-height: 720px;
+    min-height: 800px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     position: relative;
     overflow: hidden;
+    padding: 180px 0 120px; /* Increased top padding to fix overlapping */
 }
 
 @media (max-width: 768px) {
     .hero-section {
-        height: auto;
         min-height: 100vh;
-        padding-top: 100px;
-        padding-bottom: 60px;
+        padding: 120px 0 60px;
     }
 }
 
@@ -333,10 +332,11 @@ h1, h2, h3, .hero-font {
 }
 
 .hero-headline {
-    font-size: clamp(2rem, 6vw, 4rem);
-    line-height: 1.1;
-    max-width: 620px;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.05;
+    max-width: 900px;
     font-weight: 800;
+    margin-bottom: 1.5rem;
 }
 
 .trust-chip {
@@ -362,17 +362,17 @@ h1, h2, h3, .hero-font {
 
 .quote-form-grid {
     display: grid;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: end;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
     .quote-form-grid {
-        grid-template-columns: minmax(170px, 1fr) minmax(170px, 1fr) minmax(140px, 0.8fr) minmax(120px, 0.7fr) minmax(130px, 0.8fr) minmax(140px, auto);
+        grid-template-columns: 1.2fr 1.2fr 1fr 0.8fr 1fr 180px;
     }
 }
 
-@media (min-width: 1024px) and (max-width: 1199px) {
+@media (min-width: 1024px) and (max-width: 1279px) {
     .quote-form-grid {
         grid-template-columns: repeat(3, 1fr);
     }

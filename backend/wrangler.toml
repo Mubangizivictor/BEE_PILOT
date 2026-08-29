@@ -8,4 +8,4 @@ database_name = "beepilot-db"
 database_id = "04c9780f-87f0-4a5d-8776-b6aa8b60e2c4"
 
 [vars]
-PUBLIC_ORIGIN = "https://rides.victorbee.com"
+PUBLIC_ORIGIN = "https://beepilot.ug"

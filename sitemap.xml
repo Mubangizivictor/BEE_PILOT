@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://beepilot.victorbee.com/</loc>
+    <loc>https://beepilot.ug/</loc>
     <lastmod>2024-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://beepilot.victorbee.com/book.html</loc>
+    <loc>https://beepilot.ug/book.html</loc>
     <lastmod>2024-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://beepilot.victorbee.com/booking-confirmation.html</loc>
+    <loc>https://beepilot.ug/booking-confirmation.html</loc>
     <lastmod>2024-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://beepilot.victorbee.com/receipt.html</loc>
+    <loc>https://beepilot.ug/receipt.html</loc>
     <lastmod>2024-08-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

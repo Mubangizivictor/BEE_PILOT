@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const message = generateBookingMessage(currentBookingData);
         const encodedMessage = encodeURIComponent(message);
-        const whatsappNumber = "256700000000";
+        const whatsappNumber = "256793128137";
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
         window.open(whatsappUrl, '_blank');
