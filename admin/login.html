@@ -9,11 +9,11 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="bg-midnight min-h-screen flex items-center justify-center p-6">
+<body class="bg-navy min-h-screen flex items-center justify-center p-6">
     <div class="w-full max-w-md">
         <div class="text-center mb-10">
-            <div class="w-16 h-16 bg-honey rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <i data-lucide="shield-check" class="text-charcoal w-8 h-8"></i>
+            <div class="w-16 h-16 bg-gold rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="shield-check" class="text-ink w-8 h-8"></i>
             </div>
             <h1 class="text-white text-3xl font-black mb-2">BeePilot Admin</h1>
             <p class="text-gray-400">Secure owner access only</p>
@@ -24,7 +24,7 @@
                 <div>
                     <label class="text-gray-500 uppercase tracking-widest text-[10px] font-black mb-2 block">Admin Access PIN</label>
                     <input type="password" id="admin-pin"
-                           class="text-center text-3xl tracking-[1em] font-black py-4 border-2 focus:border-honey"
+                           class="w-full text-center text-3xl tracking-[1em] font-black py-4 border-2 border-border rounded-xl focus:border-gold focus:outline-none transition-colors"
                            maxlength="4" placeholder="••••" required>
                 </div>
 
@@ -32,38 +32,41 @@
                     Invalid PIN. Please try again.
                 </div>
 
-                <button type="submit" class="btn-primary w-full py-4 text-lg">
+                <button type="submit" class="btn-primary w-full py-4 text-lg justify-center">
                     Enter Dashboard
                 </button>
             </form>
 
             <p class="text-center text-gray-400 text-xs mt-8">
-                Demo PIN: <span class="font-bold text-charcoal">1234</span>
+                Demo PIN: <span class="font-bold text-ink">1234</span>
             </p>
         </div>
 
         <div class="mt-8 text-center">
-            <a href="../index.html" class="text-gray-500 hover:text-honey text-sm font-bold flex items-center justify-center gap-2">
+            <a href="../index.html" class="text-gray-500 hover:text-gold text-sm font-bold flex items-center justify-center gap-2">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to public site
             </a>
         </div>
     </div>
 
     <script type="module">
+        import { ApiService } from '../js/services/api_service.js';
         lucide.createIcons();
 
         const form = document.getElementById('login-form');
         const pinInput = document.getElementById('admin-pin');
         const errorMsg = document.getElementById('login-error');
 
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            errorMsg.classList.add('hidden');
 
-            // Static demo logic
-            if (pinInput.value === '1234') {
+            try {
+                const { token } = await ApiService.adminLogin(pinInput.value);
                 sessionStorage.setItem('bp_admin_auth', 'true');
+                sessionStorage.setItem('bp_admin_token', token);
                 window.location.href = 'dashboard.html';
-            } else {
+            } catch (error) {
                 errorMsg.classList.remove('hidden');
                 pinInput.value = '';
                 pinInput.focus();

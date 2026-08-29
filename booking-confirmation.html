@@ -3,206 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Confirmation | BeePilot</title>
+    <title>Review & Payment | BEEPILOT</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#10161B',
+                        navy: '#10233E',
+                        ivory: '#FBF8F1',
+                        gold: '#F2B928',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-ivory min-h-screen">
+<body class="bg-ivory text-ink min-h-screen">
     <header class="fixed top-0 w-full z-50 glass-nav">
-        <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <nav class="max-w-7xl mx-auto px-5 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-honey rounded-xl flex items-center justify-center">
-                    <i data-lucide="navigation" class="text-charcoal w-6 h-6"></i>
+                <div class="w-10 h-10 bg-gold rounded-lg flex items-center justify-center">
+                    <i data-lucide="navigation" class="text-ink w-6 h-6"></i>
                 </div>
-                <span class="text-2xl font-black tracking-tighter">BEEPILOT</span>
+                <span class="text-xl md:text-2xl font-black tracking-tighter">BEEPILOT</span>
             </a>
-            <div class="flex items-center gap-4">
-                <a href="index.html" class="text-sm font-bold hover:text-honey transition-colors">Home</a>
-                <a href="https://wa.me/256700000000" class="btn-primary py-2 px-4 text-xs">Support</a>
-            </div>
+            <a href="book.html" class="nav-link flex items-center gap-2 text-sm">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> <span class="hidden md:inline">Back to booking</span><span class="md:hidden">Back</span>
+            </a>
         </nav>
     </header>
 
-    <main class="pt-32 pb-20 px-6">
-        <div class="max-w-xl mx-auto" id="confirmation-content">
-            <!-- Loading State -->
-            <div class="text-center py-20" id="loading-state">
-                <div class="animate-spin w-12 h-12 border-4 border-honey border-t-transparent rounded-full mx-auto mb-4"></div>
-                <p class="text-gray-500 font-bold">Retrieving booking...</p>
+    <main class="pt-24 md:pt-32 pb-20 px-5 md:px-0 container">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
+            <!-- Left: Review Card -->
+            <div class="lg:col-span-2 space-y-6 md:space-y-8">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold mb-2">Review your booking</h1>
+                    <p class="text-sm text-text-muted">Confirm your trip details before proceeding to payment.</p>
+                </div>
+
+                <div class="card p-5 md:p-8 space-y-6">
+                    <div class="flex justify-between items-center pb-4 border-b border-border">
+                        <h3 class="font-bold text-lg md:text-xl text-navy">Trip Details</h3>
+                        <button onclick="enableEdit()" id="edit-btn" class="text-xs md:text-sm font-bold text-gold hover:underline">Edit details</button>
+                    </div>
+
+                    <div id="review-display" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                        <div>
+                            <p class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-1">Pickup Location</p>
+                            <p class="text-sm md:text-base font-bold" id="display-pickup">---</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-1">Destination</p>
+                            <p class="text-sm md:text-base font-bold" id="display-dest">---</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-1">Date & Time</p>
+                            <p class="text-sm md:text-base font-bold" id="display-datetime">---</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-1">Passengers & Ride Type</p>
+                            <p class="text-sm md:text-base font-bold" id="display-details">---</p>
+                        </div>
+                    </div>
+
+                    <!-- Editable Form (Hidden by default) -->
+                    <form id="edit-form" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                        <div class="form-group col-span-2">
+                            <label class="form-label">Pickup</label>
+                            <input type="text" id="edit-pickup" class="form-input">
+                        </div>
+                        <div class="form-group col-span-2">
+                            <label class="form-label">Destination</label>
+                            <input type="text" id="edit-dest" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" id="edit-date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Time</label>
+                            <input type="time" id="edit-time" class="form-input">
+                        </div>
+                        <div class="flex gap-4 col-span-2">
+                            <button type="button" onclick="cancelEdit()" class="btn-outline flex-1">Cancel</button>
+                            <button type="submit" class="btn-primary flex-1">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Fare Card -->
+                <div class="card bg-navy text-white border-none p-6 md:p-10 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <p class="text-blue-300 text-xs md:text-sm font-bold uppercase tracking-widest mb-2">Your fixed fare</p>
+                        <h2 class="text-3xl md:text-5xl font-black text-gold mb-6" id="display-total-fare">UGX 0</h2>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-6 md:pt-8 border-t border-white/10">
+                            <div>
+                                <p class="text-blue-300 text-[10px] md:text-xs font-bold uppercase mb-2">Deposit to confirm (30%)</p>
+                                <p class="text-xl md:text-2xl font-bold" id="display-deposit">UGX 0</p>
+                            </div>
+                            <div>
+                                <p class="text-blue-300 text-[10px] md:text-xs font-bold uppercase mb-2">Balance due on arrival</p>
+                                <p class="text-xl md:text-2xl font-bold" id="display-balance">UGX 0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decorative background icon -->
+                    <i data-lucide="banknote" class="absolute -bottom-10 -right-10 w-48 md:w-64 h-48 md:h-64 text-white/5 -rotate-12"></i>
+                </div>
             </div>
 
-            <!-- Error State (Hidden) -->
-            <div class="text-center py-20 hidden" id="error-state">
-                <i data-lucide="alert-circle" class="w-16 h-16 text-warm-red mx-auto mb-4"></i>
-                <h2 class="text-2xl font-black mb-2">Booking not found</h2>
-                <p class="text-gray-500 mb-8">We couldn't find a booking with this reference.</p>
-                <a href="book.html" class="btn-primary">Start New Booking</a>
-            </div>
-
-            <!-- Success Content (Hidden) -->
-            <div class="hidden" id="success-state">
-                <div class="text-center mb-10">
-                    <div class="w-20 h-20 bg-sage text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-sage/20">
-                        <i data-lucide="check" class="w-10 h-10"></i>
-                    </div>
-                    <h1 class="text-4xl font-black mb-2">Booking Request Sent!</h1>
-                    <p class="text-gray-500 font-medium">Thank you for choosing BeePilot.</p>
-                </div>
-
-                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 mb-8 overflow-hidden relative">
-                    <div class="absolute top-0 right-0 p-6">
-                        <span id="status-chip" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-honey/10 text-honey">
-                            Awaiting Confirmation
-                        </span>
-                    </div>
-
-                    <div class="mb-8">
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Booking Code</p>
-                        <h2 class="text-2xl font-black flex items-center gap-2">
-                            <span id="display-ref">---</span>
-                            <button class="text-gray-300 hover:text-honey" onclick="copyRef()"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                        </h2>
-                    </div>
-
-                    <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-ivory flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="map-pin" class="w-4 h-4 text-charcoal"></i>
+            <!-- Right: Payment Panel -->
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Choose Payment Method</h3>
+                    <div class="space-y-4">
+                        <label class="relative block cursor-pointer group">
+                            <input type="radio" name="payment" value="momo" class="peer sr-only" checked>
+                            <div class="p-6 bg-white border border-border rounded-xl transition-all peer-checked:border-gold peer-checked:bg-gold/5 hover:border-gold/50">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-yellow-400 rounded-lg flex items-center justify-center font-bold text-xs">MTN</div>
+                                    <div>
+                                        <h4 class="font-bold text-navy">MTN MoMo</h4>
+                                        <p class="text-xs text-text-muted">Instant mobile payment</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Route</p>
-                                <p class="font-bold"><span id="display-pickup">---</span> → <span id="display-dest">---</span></p>
-                            </div>
-                        </div>
+                        </label>
 
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-ivory flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="calendar" class="w-4 h-4 text-charcoal"></i>
+                        <label class="relative block cursor-pointer group">
+                            <input type="radio" name="payment" value="airtel" class="peer sr-only">
+                            <div class="p-6 bg-white border border-border rounded-xl transition-all peer-checked:border-gold peer-checked:bg-gold/5 hover:border-gold/50">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center font-bold text-xs text-white">Airtel</div>
+                                    <div>
+                                        <h4 class="font-bold text-navy">Airtel Money</h4>
+                                        <p class="text-xs text-text-muted">Instant mobile payment</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Date & Time</p>
-                                <p class="font-bold" id="display-datetime">---</p>
-                            </div>
-                        </div>
+                        </label>
 
-                        <div class="grid grid-cols-2 gap-4">
-                             <div>
-                                <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Passengers</p>
-                                <p class="font-bold" id="display-pass">0</p>
+                        <label class="relative block cursor-pointer group">
+                            <input type="radio" name="payment" value="bank" class="peer sr-only">
+                            <div class="p-6 bg-white border border-border rounded-xl transition-all peer-checked:border-gold peer-checked:bg-gold/5 hover:border-gold/50">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-navy rounded-lg flex items-center justify-center font-bold text-xs text-white"><i data-lucide="landmark" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-navy">Bank Transfer</h4>
+                                        <p class="text-xs text-text-muted">EFT or Mobile Banking</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Service</p>
-                                <p class="font-bold" id="display-service">---</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-8 pt-8 border-t border-gray-50">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-gray-500 font-bold">Total Fare</span>
-                            <span class="text-2xl font-black" id="display-fare">UGX 0</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500 font-bold text-sm">Deposit Due (30%)</span>
-                            <span class="text-honey font-black" id="display-deposit">UGX 0</span>
-                        </div>
+                        </label>
                     </div>
                 </div>
 
-                <!-- Payment Instructions -->
-                <div class="bg-charcoal text-white rounded-[2.5rem] p-8 mb-8">
-                    <h3 class="text-xl font-black mb-6 flex items-center gap-3">
-                        <i data-lucide="banknote" class="text-honey"></i> Payment Instructions
-                    </h3>
-                    <div class="space-y-6">
-                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
-                            <div>
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">MTN MoMo</p>
-                                <p class="font-bold">+256 772 000 000</p>
-                                <p class="text-[10px] text-gray-500">BeePilot Services Ltd</p>
-                            </div>
-                            <button class="text-gray-400 hover:text-honey"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                        </div>
-                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
-                            <div>
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Airtel Money</p>
-                                <p class="font-bold">+256 701 000 000</p>
-                                <p class="text-[10px] text-gray-500">BeePilot Services Ltd</p>
-                            </div>
-                            <button class="text-gray-400 hover:text-honey"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                        </div>
-                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
-                            <div>
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Stanbic Bank</p>
-                                <p class="font-bold">9030012345678</p>
-                                <p class="text-[10px] text-gray-500">Mbarara Branch</p>
-                            </div>
-                            <button class="text-gray-400 hover:text-honey"><i data-lucide="copy" class="w-4 h-4"></i></button>
-                        </div>
+                <div id="payment-instructions" class="p-6 bg-white border border-border rounded-xl hidden">
+                    <h4 class="font-bold text-sm mb-4 uppercase tracking-widest text-text-muted">Payment Instructions</h4>
+                    <div id="instruction-content" class="space-y-4 text-sm">
+                        <!-- Dynamic content -->
                     </div>
-                    <p class="mt-6 text-xs text-gray-500 italic text-center">
-                        Use your booking code <strong>BP-XXXXXX</strong> as payment reference.
-                    </p>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <a id="whatsapp-link" href="#" class="btn-primary py-4">
-                        Chat on WhatsApp
-                    </a>
-                    <button class="btn-outline py-4 opacity-50 cursor-not-allowed" disabled>
-                        Download Receipt
-                    </button>
-                </div>
-                <p class="text-center text-[10px] text-gray-400 mt-4 italic">Receipt becomes available after deposit payment is confirmed.</p>
+                <button id="confirm-booking-btn" class="btn-primary w-full h-[64px] justify-center text-lg shadow-xl shadow-gold/20">
+                    Confirm booking on WhatsApp
+                </button>
+
+                <p class="text-center text-xs text-text-muted">
+                    <i data-lucide="shield-check" class="inline w-3 h-3 mr-1"></i>
+                    Your booking is secure. Payment confirmation is manual.
+                </p>
             </div>
         </div>
     </main>
 
     <script type="module">
-        import { BookingRepository } from './js/repositories/booking_repository.js';
         import { formatCurrency, formatDate, formatTime, generateBookingMessage } from './js/utils/helpers.js';
+        import { ApiService } from './js/services/api_service.js';
+        import { CONFIG } from './js/config.js';
 
-        lucide.createIcons();
+        let bookingData = JSON.parse(localStorage.getItem('pending_booking'));
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const bookingId = urlParams.get('id');
-        const repo = new BookingRepository();
+        if (!bookingData) {
+            window.location.href = 'book.html';
+        }
 
-        const loading = document.getElementById('loading-state');
-        const error = document.getElementById('error-state');
-        const success = document.getElementById('success-state');
+        const renderReview = () => {
+            document.getElementById('display-pickup').textContent = bookingData.pickupLocation;
+            document.getElementById('display-dest').textContent = bookingData.destination;
+            document.getElementById('display-datetime').textContent = `${formatDate(bookingData.date)} at ${formatTime(bookingData.time)}`;
+            document.getElementById('display-details').textContent = `${bookingData.passengers} Pax, ${bookingData.bags || 0} Bags • ${bookingData.serviceType === 'cityIntercity' ? 'City & Intercity' : bookingData.serviceType === 'airportTransfer' ? 'Airport Transfer' : 'Special Hire'}`;
+            document.getElementById('display-total-fare').textContent = formatCurrency(bookingData.totalFare);
+            document.getElementById('display-deposit').textContent = formatCurrency(bookingData.depositAmount);
+            document.getElementById('display-balance').textContent = formatCurrency(bookingData.totalFare - bookingData.depositAmount);
+        };
 
-        setTimeout(() => {
-            const booking = repo.getById(bookingId);
-            loading.classList.add('hidden');
+        window.enableEdit = () => {
+            document.getElementById('review-display').classList.add('hidden');
+            document.getElementById('edit-form').classList.remove('hidden');
+            document.getElementById('edit-btn').classList.add('hidden');
 
-            if (!booking) {
-                error.classList.remove('hidden');
-                return;
+            document.getElementById('edit-pickup').value = bookingData.pickupLocation;
+            document.getElementById('edit-dest').value = bookingData.destination;
+            document.getElementById('edit-date').value = bookingData.date;
+            document.getElementById('edit-time').value = bookingData.time;
+        };
+
+        window.cancelEdit = () => {
+            document.getElementById('review-display').classList.remove('hidden');
+            document.getElementById('edit-form').classList.add('hidden');
+            document.getElementById('edit-btn').classList.remove('hidden');
+        };
+
+        document.getElementById('edit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            bookingData.pickupLocation = document.getElementById('edit-pickup').value;
+            bookingData.destination = document.getElementById('edit-dest').value;
+            bookingData.date = document.getElementById('edit-date').value;
+            bookingData.time = document.getElementById('edit-time').value;
+
+            localStorage.setItem('pending_booking', JSON.stringify(bookingData));
+            renderReview();
+            cancelEdit();
+        });
+
+        const updateInstructions = () => {
+            const method = document.querySelector('input[name="payment"]:checked').value;
+            const container = document.getElementById('payment-instructions');
+            const content = document.getElementById('instruction-content');
+            container.classList.remove('hidden');
+
+            if (method === 'momo') {
+                content.innerHTML = `
+                    <div class="flex justify-between items-center bg-ivory p-3 rounded-lg">
+                        <div>
+                            <p class="font-bold text-navy">+256 772 000 000</p>
+                            <p class="text-[10px] text-text-muted">Merchant: BeePilot Services</p>
+                        </div>
+                        <button class="text-gold"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                    </div>
+                    <p class="text-xs italic">Enter your booking ref <strong>${bookingData.id}</strong> as reason.</p>
+                `;
+            } else if (method === 'airtel') {
+                content.innerHTML = `
+                    <div class="flex justify-between items-center bg-ivory p-3 rounded-lg">
+                        <div>
+                            <p class="font-bold text-navy">+256 701 000 000</p>
+                            <p class="text-[10px] text-text-muted">Name: VICTOR MUBANGIZI</p>
+                        </div>
+                        <button class="text-gold"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                    </div>
+                    <p class="text-xs italic">Enter your booking ref <strong>${bookingData.id}</strong> as reason.</p>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="space-y-2">
+                        <p class="font-bold text-navy">Stanbic Bank</p>
+                        <p class="text-xs">Account: 9030012345678</p>
+                        <p class="text-xs">Name: BeePilot Services Ltd</p>
+                        <p class="text-xs">Branch: Mbarara City</p>
+                    </div>
+                `;
             }
-
-            success.classList.remove('hidden');
-            document.getElementById('display-ref').textContent = booking.id;
-            document.getElementById('display-pickup').textContent = booking.pickupLocation;
-            document.getElementById('display-dest').textContent = booking.destination;
-            document.getElementById('display-datetime').textContent = `${formatDate(booking.date)} at ${formatTime(booking.time)}`;
-            document.getElementById('display-pass').textContent = booking.passengers;
-            document.getElementById('display-service').textContent = booking.serviceType;
-            document.getElementById('display-fare').textContent = formatCurrency(booking.totalFare);
-            document.getElementById('display-deposit').textContent = formatCurrency(booking.depositAmount);
-
-            const message = generateBookingMessage(booking);
-            document.getElementById('whatsapp-link').href = `https://wa.me/256700000000?text=${encodeURIComponent(message)}`;
-
-            window.copyRef = () => {
-                navigator.clipboard.writeText(booking.id);
-                alert('Reference copied!');
-            };
-
             lucide.createIcons();
-        }, 800);
+        };
+
+        document.querySelectorAll('input[name="payment"]').forEach(input => {
+            input.addEventListener('change', updateInstructions);
+        });
+
+        document.getElementById('confirm-booking-btn').addEventListener('click', async () => {
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            bookingData.paymentMethod = paymentMethod;
+
+            // 1. Submit to Backend
+            try {
+                await ApiService.createBooking(bookingData);
+
+                // 2. Open WhatsApp
+                const message = generateBookingMessage({
+                    ...bookingData,
+                    paymentMethod: paymentMethod === 'momo' ? 'MTN MoMo' : paymentMethod === 'airtel' ? 'Airtel Money' : 'Bank Transfer'
+                });
+                const whatsappUrl = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+                window.open(whatsappUrl, '_blank');
+
+                // 3. Redirect to status page
+                window.location.href = `receipt.html?id=${bookingData.id}`;
+
+            } catch (error) {
+                alert("Error saving booking. You can still proceed on WhatsApp.");
+                console.error(error);
+                // Fallback to WhatsApp even if backend fails
+                const message = generateBookingMessage(bookingData);
+                window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        });
+
+        renderReview();
+        updateInstructions();
+        lucide.createIcons();
     </script>
 </body>
 </html>

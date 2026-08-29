@@ -3,133 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | BeePilot Admin</title>
+    <title>Owner Dashboard | BEEPILOT</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        .sidebar-link.active {
-            background-color: var(--honey-gold);
-            color: var(--charcoal);
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#10161B',
+                        navy: '#10233E',
+                        ivory: '#FBF8F1',
+                        gold: '#F2B928',
+                    }
+                }
+            }
         }
-    </style>
+    </script>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gray-50 flex min-h-screen">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-charcoal text-white hidden lg:flex flex-col fixed inset-y-0">
-        <div class="p-8">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-honey rounded-lg flex items-center justify-center">
-                    <i data-lucide="navigation" class="text-charcoal w-5 h-5"></i>
+<body class="admin-theme min-h-screen pb-20 md:pb-0">
+    <div class="admin-layout">
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="admin-sidebar bg-navy flex flex-col p-6">
+            <div class="flex items-center gap-2 mb-12">
+                <div class="w-8 h-8 bg-gold rounded-lg flex items-center justify-center">
+                    <i data-lucide="navigation" class="text-ink w-5 h-5"></i>
                 </div>
-                <span class="text-xl font-black tracking-tighter">BEEPILOT</span>
+                <span class="text-xl font-black tracking-tighter text-white">BEEPILOT</span>
             </div>
+
+            <nav class="flex-1 space-y-1">
+                <a href="dashboard.html" class="admin-nav-item active">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="admin-nav-item">
+                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                    <span>Bookings</span>
+                </a>
+                <a href="#" class="admin-nav-item">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <span>Drivers</span>
+                </a>
+                <a href="#" class="admin-nav-item">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <button id="logout-btn" class="admin-nav-item mt-auto text-red-400 hover:bg-red-400/10">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Logout</span>
+            </button>
+        </aside>
+
+        <!-- Mobile Top Brand Bar (For Consistency) -->
+        <div class="md:hidden glass-nav px-6 h-16 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gold rounded-lg flex items-center justify-center">
+                    <i data-lucide="navigation" class="text-ink w-5 h-5"></i>
+                </div>
+                <span class="text-lg font-black tracking-tighter">BEEPILOT</span>
+            </div>
+            <button class="p-2 bg-white rounded-lg shadow-sm border border-border"><i data-lucide="bell" class="w-4 h-4"></i></button>
         </div>
 
-        <nav class="flex-1 px-4 space-y-2 mt-4">
-            <a href="dashboard.html" class="sidebar-link active flex items-center gap-3 p-3 rounded-xl font-bold transition-all">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-bottom-nav">
+            <a href="dashboard.html" class="bottom-nav-item active">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dash</span>
             </a>
-            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
-                <i data-lucide="calendar" class="w-5 h-5"></i> Bookings
+            <a href="#" class="bottom-nav-item">
+                <i data-lucide="calendar"></i>
+                <span>Bookings</span>
             </a>
-            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
-                <i data-lucide="credit-card" class="w-5 h-5"></i> Payments
+            <a href="#" class="bottom-nav-item">
+                <i data-lucide="users"></i>
+                <span>Drivers</span>
             </a>
-            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
-                <i data-lucide="users" class="w-5 h-5"></i> Customers
-            </a>
-            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
-                <i data-lucide="settings-2" class="w-5 h-5"></i> Fare Settings
-            </a>
-            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
-                <i data-lucide="map" class="w-5 h-5"></i> Fixed Routes
+            <a href="#" class="bottom-nav-item" id="mobile-more-btn">
+                <i data-lucide="menu"></i>
+                <span>Menu</span>
             </a>
         </nav>
 
-        <div class="p-4 border-t border-white/10">
-            <button id="logout-btn" class="flex items-center gap-3 p-3 text-gray-400 hover:text-white font-bold w-full">
-                <i data-lucide="log-out" class="w-5 h-5"></i> Logout
-            </button>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 lg:ml-64 p-8">
-        <!-- Top Nav -->
-        <header class="flex justify-between items-center mb-12">
-            <div>
-                <h1 class="text-3xl font-black">Dashboard</h1>
-                <p class="text-gray-500">Welcome back, Owner</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <button class="p-2 bg-white rounded-xl shadow-sm border border-gray-100"><i data-lucide="bell"></i></button>
-                <div class="w-10 h-10 bg-honey rounded-full flex items-center justify-center font-black">BP</div>
-            </div>
-        </header>
-
-        <!-- KPI Cards -->
-        <div class="grid md:grid-cols-4 gap-6 mb-12">
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                <p class="text-gray-400 text-xs font-bold uppercase mb-2">Today's Bookings</p>
-                <h3 class="text-3xl font-black" id="stat-today">0</h3>
-            </div>
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                <p class="text-gray-400 text-xs font-bold uppercase mb-2">Awaiting Deposit</p>
-                <h3 class="text-3xl font-black text-honey" id="stat-awaiting">0</h3>
-            </div>
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                <p class="text-gray-400 text-xs font-bold uppercase mb-2">Confirmed Trips</p>
-                <h3 class="text-3xl font-black text-sage" id="stat-confirmed">0</h3>
-            </div>
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-                <p class="text-gray-400 text-xs font-bold uppercase mb-2">Monthly Revenue</p>
-                <h3 class="text-3xl font-black" id="stat-revenue">UGX 0</h3>
-            </div>
-        </div>
-
-        <!-- Recent Bookings Table -->
-        <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
-            <div class="p-8 border-b border-gray-50 flex justify-between items-center">
-                <h2 class="text-xl font-black">Recent Bookings</h2>
-                <div class="flex gap-2">
-                    <div class="relative">
-                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                        <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl text-sm w-64">
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold">Dashboard</h1>
+                    <p class="text-xs text-text-muted">Welcome back, Victor.</p>
+                </div>
+                <div class="hidden md:flex items-center gap-4 w-full md:w-auto">
+                    <div class="relative flex-1 md:flex-none">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
+                        <input type="text" placeholder="Search..." class="form-input pl-10 w-full md:w-64 bg-white border-none shadow-sm h-10">
                     </div>
+                    <button class="p-2 bg-white rounded-lg shadow-sm border border-border h-10 w-10 flex items-center justify-center"><i data-lucide="bell" class="w-5 h-5"></i></button>
+                </div>
+            </header>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
+                <div class="stat-card p-4 md:p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="car" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+                    </div>
+                    <p class="text-text-muted text-[10px] font-bold uppercase tracking-widest mb-1">Today</p>
+                    <h3 class="text-xl md:text-3xl font-black" id="stat-rides">0</h3>
+                </div>
+                <div class="stat-card p-4 md:p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-green-50 text-green-600 rounded-lg"><i data-lucide="banknote" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+                    </div>
+                    <p class="text-text-muted text-[10px] font-bold uppercase tracking-widest mb-1">Revenue</p>
+                    <h3 class="text-xl md:text-3xl font-black" id="stat-revenue">0</h3>
+                </div>
+                <div class="stat-card p-4 md:p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-yellow-50 text-yellow-600 rounded-lg"><i data-lucide="clock" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+                    </div>
+                    <p class="text-text-muted text-[10px] font-bold uppercase tracking-widest mb-1">Pending</p>
+                    <h3 class="text-xl md:text-3xl font-black" id="stat-pending-val">0</h3>
+                </div>
+                <div class="stat-card p-4 md:p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-purple-50 text-purple-600 rounded-lg"><i data-lucide="users" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+                    </div>
+                    <p class="text-text-muted text-[10px] font-bold uppercase tracking-widest mb-1">Drivers</p>
+                    <h3 class="text-xl md:text-3xl font-black" id="stat-drivers-count">8</h3>
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left">
-                    <thead class="bg-gray-50 text-gray-400 text-[10px] font-black uppercase tracking-widest">
-                        <tr>
-                            <th class="px-8 py-4">Code</th>
-                            <th class="px-8 py-4">Customer</th>
-                            <th class="px-8 py-4">Route</th>
-                            <th class="px-8 py-4">Date & Time</th>
-                            <th class="px-8 py-4">Fare</th>
-                            <th class="px-8 py-4">Status</th>
-                            <th class="px-8 py-4">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookings-table-body" class="divide-y divide-gray-50">
-                        <!-- Bookings will be loaded here -->
-                        <tr>
-                            <td colspan="7" class="px-8 py-20 text-center text-gray-400 italic">No bookings found</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Bookings Table -->
+                <div class="lg:col-span-2 card p-0 overflow-hidden">
+                    <div class="p-5 md:p-6 border-b border-border flex justify-between items-center">
+                        <h2 class="text-lg md:text-xl font-bold">Recent Bookings</h2>
+                        <button class="text-xs font-bold text-gold hover:underline">View all</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="data-table w-full">
+                            <thead>
+                                <tr>
+                                    <th class="px-5">Ref</th>
+                                    <th>Customer</th>
+                                    <th class="hidden md:table-cell">Route</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-table-body">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Schedule (Visible on desktop, but could be shown on mobile if needed) -->
+                <div class="card md:block">
+                    <h2 class="text-lg md:text-xl font-bold mb-6">Today's Schedule</h2>
+                    <div class="space-y-4" id="today-schedule">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Booking Detail Drawer -->
+    <div id="booking-drawer" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeDrawer()"></div>
+        <div class="absolute bottom-0 md:right-0 md:top-0 h-[80vh] md:h-full w-full max-w-md bg-white rounded-t-3xl md:rounded-none shadow-2xl p-6 md:p-8 transform translate-y-full md:translate-y-0 md:translate-x-full transition-transform duration-300 overflow-y-auto">
+            <div class="w-12 h-1 bg-border rounded-full mx-auto mb-6 md:hidden"></div>
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl md:text-2xl font-bold">Booking Details</h2>
+                <button onclick="closeDrawer()" class="p-2 hover:bg-ivory rounded-full"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+
+            <div id="drawer-content" class="space-y-6 md:space-y-8 pb-10">
+                <!-- Dynamic -->
             </div>
         </div>
-    </main>
+    </div>
 
     <script type="module">
-        import { BookingRepository } from '../js/repositories/booking_repository.js';
         import { formatCurrency, formatDate, formatTime } from '../js/utils/helpers.js';
-
-        lucide.createIcons();
+        import { ApiService } from '../js/services/api_service.js';
 
         // Auth check
         if (!sessionStorage.getItem('bp_admin_auth')) {
@@ -138,44 +200,212 @@
 
         document.getElementById('logout-btn').addEventListener('click', () => {
             sessionStorage.removeItem('bp_admin_auth');
+            sessionStorage.removeItem('bp_admin_token');
             window.location.href = 'login.html';
         });
 
-        const repo = new BookingRepository();
-        const bookings = repo.getAll();
+        let currentBookings = [];
 
-        const tableBody = document.getElementById('bookings-table-body');
+        const loadDashboard = async () => {
+            try {
+                currentBookings = await ApiService.getAdminBookings();
+                updateStats();
+                renderTable();
+                renderSchedule();
+                lucide.createIcons();
+            } catch (error) {
+                console.error(error);
+                // Fallback for demo/local if API is not reachable
+                currentBookings = JSON.parse(localStorage.getItem('beepilot_bookings') || '[]');
+                updateStats();
+                renderTable();
+                renderSchedule();
+                lucide.createIcons();
+            }
+        };
 
-        // Update Stats
-        document.getElementById('stat-today').textContent = bookings.length;
-        document.getElementById('stat-awaiting').textContent = bookings.filter(b => b.status === 'awaiting_confirmation').length;
+        const updateStats = () => {
+            const today = new Date().toISOString().split('T')[0];
+            const todayRides = currentBookings.filter(b => b.date === today);
+            const pendingPayments = currentBookings.filter(b => b.status === 'pending' || b.status === 'awaiting_confirmation');
+            const totalRevenue = currentBookings.filter(b => b.status === 'paid' || b.status === 'completed')
+                                             .reduce((sum, b) => sum + (Number(b.totalFare) || 0), 0);
 
-        if (bookings.length > 0) {
-            tableBody.innerHTML = '';
-            bookings.reverse().forEach(b => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-gray-50 transition-colors cursor-pointer';
-                tr.innerHTML = `
-                    <td class="px-8 py-6 font-bold text-sm">${b.id}</td>
-                    <td class="px-8 py-6">
+            document.getElementById('stat-rides').textContent = todayRides.length;
+            document.getElementById('stat-revenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('stat-pending-val').textContent = pendingPayments.length;
+        };
+
+        const renderTable = () => {
+            const tbody = document.getElementById('bookings-table-body');
+            tbody.innerHTML = currentBookings.slice(0, 10).map(b => `
+                <tr class="hover:bg-ivory/50 cursor-pointer" onclick="showBooking('${b.id}')">
+                    <td class="px-5 font-bold">#${b.id.split('-').pop()}</td>
+                    <td>
                         <div class="font-bold text-sm">${b.customerName}</div>
-                        <div class="text-xs text-gray-400">${b.customerPhone}</div>
+                        <div class="text-[10px] text-text-muted">${b.customerPhone}</div>
                     </td>
-                    <td class="px-8 py-6 text-sm">${b.pickupLocation} → ${b.destination}</td>
-                    <td class="px-8 py-6 text-sm">${formatDate(b.date)} at ${formatTime(b.time)}</td>
-                    <td class="px-8 py-6 font-bold text-sm">${formatCurrency(b.totalFare)}</td>
-                    <td class="px-8 py-6">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase bg-honey/10 text-honey">
-                            ${b.status.replace('_', ' ')}
-                        </span>
-                    </td>
-                    <td class="px-8 py-6">
-                        <button class="text-honey hover:underline text-sm font-bold">View</button>
-                    </td>
-                `;
-                tableBody.appendChild(tr);
-            });
-        }
+                    <td class="hidden md:table-cell text-sm">${b.pickupLocation.split(',')[0]} → ${b.destination.split(',')[0]}</td>
+                    <td><span class="badge ${getStatusClass(b.status)} text-[10px]">${b.status}</span></td>
+                    <td><button class="text-gold p-2"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></td>
+                </tr>
+            `).join('') || '<tr><td colspan="5" class="text-center py-10 text-text-muted italic">No bookings found</td></tr>';
+        };
+
+        const getStatusClass = (status) => {
+            switch(status?.toLowerCase()) {
+                case 'paid':
+                case 'completed': return 'badge-completed';
+                case 'pending':
+                case 'awaiting_confirmation': return 'badge-pending';
+                case 'confirmed':
+                case 'scheduled': return 'badge-confirmed';
+                case 'cancelled': return 'badge-cancelled';
+                default: return 'badge-gold';
+            }
+        };
+
+        const renderSchedule = () => {
+            const container = document.getElementById('today-schedule');
+            const today = new Date().toISOString().split('T')[0];
+            const todayBookings = currentBookings.filter(b => b.date === today).sort((a,b) => a.time.localeCompare(b.time));
+
+            container.innerHTML = todayBookings.slice(0, 5).map(b => `
+                <div class="flex items-center gap-4 p-3 hover:bg-ivory rounded-lg transition-colors cursor-pointer" onclick="showBooking('${b.id}')">
+                    <div class="text-center min-w-[50px]">
+                        <p class="text-[10px] font-bold text-text-muted uppercase">${formatTime(b.time).split(' ')[1]}</p>
+                        <p class="font-black text-navy">${formatTime(b.time).split(' ')[0]}</p>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-bold">${b.customerName}</p>
+                        <p class="text-[10px] text-text-muted">${b.pickupLocation.split(',')[0]}</p>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-border"></i>
+                </div>
+            `).join('') || '<p class="text-center py-4 text-xs text-text-muted">No rides scheduled for today.</p>';
+        };
+
+        window.showBooking = (id) => {
+            const b = currentBookings.find(x => x.id === id);
+            const drawer = document.getElementById('booking-drawer');
+            const content = document.getElementById('drawer-content');
+            const innerPanel = drawer.querySelector('.transform');
+
+            content.innerHTML = `
+                <div class="p-6 bg-navy text-white rounded-2xl relative overflow-hidden">
+                    <p class="text-blue-300 text-[10px] font-bold uppercase tracking-widest mb-1">Status</p>
+                    <h3 class="text-2xl font-black mb-4 uppercase">${b.status.replace('_', ' ')}</h3>
+                    <div class="flex justify-between items-end">
+                         <div>
+                            <p class="text-blue-300 text-[10px] font-bold uppercase mb-1">Fare</p>
+                            <p class="text-xl font-bold text-gold">${formatCurrency(b.totalFare)}</p>
+                        </div>
+                        ${(b.status === 'pending' || b.status === 'awaiting_confirmation') ?
+                            `<button onclick="confirmPayment('${b.id}')" class="btn-primary py-2 px-4 text-xs">Confirm Payment</button>` :
+                            `<span class="text-green-400 flex items-center gap-1 text-xs font-bold"><i data-lucide="check-circle" class="w-4 h-4"></i> Paid</span>`
+                        }
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-2">Customer Info</h4>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-ivory rounded-full flex items-center justify-center font-bold text-navy">${b.customerName[0]}</div>
+                            <div>
+                                <p class="font-bold">${b.customerName}</p>
+                                <p class="text-xs text-text-muted">${b.customerPhone}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-2">Trip Timeline</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-2 h-2 rounded-full bg-gold mt-1.5"></div>
+                                <div>
+                                    <p class="text-[10px] text-text-muted uppercase">Pickup</p>
+                                    <p class="text-sm font-bold">${b.pickupLocation}</p>
+                                    <p class="text-[10px] text-text-muted">${formatDate(b.date)} at ${formatTime(b.time)}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-2 h-2 rounded-full bg-navy mt-1.5"></div>
+                                <div>
+                                    <p class="text-[10px] text-text-muted uppercase">Destination</p>
+                                    <p class="text-sm font-bold">${b.destination}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-2">Passengers</h4>
+                            <p class="text-sm font-bold">${b.passengers}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-2">Bags</h4>
+                            <p class="text-sm font-bold">${b.bags || 0}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-[10px] font-black text-text-muted uppercase tracking-widest mb-2">Internal Notes</h4>
+                        <p class="text-sm p-4 bg-ivory rounded-xl text-text-muted italic">${b.notes || 'No special requirements provided.'}</p>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-border grid grid-cols-2 gap-4">
+                    <button class="btn-outline py-3 text-sm" onclick="closeDrawer()">Back</button>
+                    <button class="btn-primary py-3 text-sm" onclick="window.location.href='../receipt.html?id=${b.id}'">View Receipt</button>
+                </div>
+            `;
+
+            drawer.classList.remove('hidden');
+            setTimeout(() => {
+                innerPanel.classList.remove('translate-y-full', 'md:translate-x-full');
+            }, 10);
+            lucide.createIcons();
+        };
+
+        window.closeDrawer = () => {
+            const drawer = document.getElementById('booking-drawer');
+            const innerPanel = drawer.querySelector('.transform');
+            innerPanel.classList.add('translate-y-full', 'md:translate-x-full');
+            setTimeout(() => {
+                drawer.classList.add('hidden');
+            }, 300);
+        };
+
+        window.confirmPayment = async (id) => {
+            if (!confirm("Are you sure you want to confirm this payment? This will update the status to PAID and generate a receipt.")) return;
+
+            try {
+                await ApiService.confirmPayment(id);
+                alert("Payment confirmed successfully.");
+                loadDashboard();
+                closeDrawer();
+            } catch (error) {
+                console.error(error);
+                // Local fallback
+                const b = currentBookings.find(x => x.id === id);
+                if (b) {
+                    b.status = 'paid';
+                    b.paymentConfirmed = true;
+                    const all = JSON.parse(localStorage.getItem('beepilot_bookings') || '[]');
+                    const idx = all.findIndex(x => x.id === id);
+                    if (idx !== -1) all[idx] = b;
+                    localStorage.setItem('beepilot_bookings', JSON.stringify(all));
+                    loadDashboard();
+                    closeDrawer();
+                }
+            }
+        };
+
+        loadDashboard();
+        lucide.createIcons();
     </script>
 </body>
 </html>

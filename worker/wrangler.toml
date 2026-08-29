@@ -1,0 +1,12 @@
+name = "beepilot-api"
+main = "src/index.js"
+compatibility_date = "2024-04-03"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "beepilot-db"
+database_id = "YOUR_D1_DATABASE_ID"
+
+[vars]
+ADMIN_PIN = "1234"
+JWT_SECRET = "super-secret-key-change-me"
