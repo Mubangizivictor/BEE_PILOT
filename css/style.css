@@ -305,6 +305,127 @@ h1, h2, h3, .hero-font {
     .no-print { display: none; }
 }
 
+/* Hero & Quote Form Refinements */
+.hero-section {
+    min-height: 650px;
+    height: 80vh;
+    max-height: 720px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: auto;
+        min-height: 100vh;
+        padding-top: 100px;
+        padding-bottom: 60px;
+    }
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(16, 35, 62, 0.9), rgba(16, 22, 27, 0.95));
+    z-index: 1;
+}
+
+.hero-headline {
+    font-size: clamp(2rem, 6vw, 4rem);
+    line-height: 1.1;
+    max-width: 620px;
+    font-weight: 800;
+}
+
+.trust-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 99px;
+    color: var(--white);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.quote-card {
+    background: var(--white);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+}
+
+.quote-form-grid {
+    display: grid;
+    gap: 1.5rem;
+    align-items: end;
+}
+
+@media (min-width: 1200px) {
+    .quote-form-grid {
+        grid-template-columns: minmax(170px, 1fr) minmax(170px, 1fr) minmax(140px, 0.8fr) minmax(120px, 0.7fr) minmax(130px, 0.8fr) minmax(140px, auto);
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .quote-form-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1023px) {
+    .quote-form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .quote-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.whatsapp-banner-btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    border: 2px solid var(--white);
+    color: var(--white);
+    background: transparent;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.whatsapp-banner-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+}
+
+.form-input {
+    height: 52px;
+    font-weight: 600;
+}
+
 /* Tap Target Compliance */
 button, a, input, select, textarea {
     min-height: 48px;

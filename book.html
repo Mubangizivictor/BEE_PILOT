@@ -24,16 +24,16 @@
 </head>
 <body class="bg-ivory text-ink min-h-screen overflow-x-hidden">
     <!-- Header -->
-    <header class="fixed top-0 w-full z-50 glass-nav">
-        <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <header class="fixed top-0 w-full z-50 bg-ivory border-b border-black/5">
+        <nav class="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-gold rounded-lg flex items-center justify-center">
-                    <i data-lucide="navigation" class="text-ink w-6 h-6"></i>
+                <div class="w-8 h-8 bg-gold rounded flex items-center justify-center">
+                    <i data-lucide="navigation" class="text-ink w-5 h-5"></i>
                 </div>
-                <span class="text-2xl font-black tracking-tighter">BEEPILOT</span>
+                <span class="text-xl font-black tracking-tighter">BEEPILOT</span>
             </a>
             <div class="flex items-center gap-4">
-                <a href="index.html" class="nav-link text-sm font-bold flex items-center gap-1">
+                <a href="index.html" class="nav-link text-sm uppercase tracking-wide flex items-center gap-2">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
                 </a>
             </div>
@@ -280,6 +280,18 @@
                         document.getElementById('submit-btn').disabled = false;
                     }
                 };
+
+                // Handle incoming parameters from index.html
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('pickup')) document.getElementById('pickupLocation').value = params.get('pickup');
+                if (params.has('destination')) document.getElementById('destination').value = params.get('destination');
+                if (params.has('date')) document.getElementById('date').value = params.get('date');
+                if (params.has('time')) document.getElementById('time').value = params.get('time');
+                if (params.has('passengers')) document.getElementById('passengers').value = params.get('passengers');
+
+                if (params.has('pickup') && params.has('destination')) {
+                    setTimeout(updateRoute, 1000);
+                }
 
                 autocompletePickup.addListener('place_changed', updateRoute);
                 autocompleteDest.addListener('place_changed', updateRoute);

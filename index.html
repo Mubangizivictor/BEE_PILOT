@@ -25,20 +25,20 @@
 </head>
 <body class="bg-ivory text-ink">
     <!-- Header -->
-    <header class="fixed top-0 w-full z-50 glass-nav">
-        <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <header class="fixed top-0 w-full z-50 bg-ivory border-b border-black/5">
+        <nav class="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-gold rounded-lg flex items-center justify-center">
-                    <i data-lucide="navigation" class="text-ink w-6 h-6"></i>
+                <div class="w-8 h-8 bg-gold rounded flex items-center justify-center">
+                    <i data-lucide="navigation" class="text-ink w-5 h-5"></i>
                 </div>
-                <span class="text-2xl font-black tracking-tighter">BEEPILOT</span>
+                <span class="text-xl font-black tracking-tighter">BEEPILOT</span>
             </a>
 
             <div class="hidden md:flex items-center gap-8">
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#how-it-works" class="nav-link">How it works</a>
-                <a href="#faq" class="nav-link">FAQ</a>
-                <a href="book.html" class="btn-primary">Book a ride</a>
+                <a href="#services" class="nav-link text-sm uppercase tracking-wide">Services</a>
+                <a href="#how-it-works" class="nav-link text-sm uppercase tracking-wide">How it works</a>
+                <a href="#faq" class="nav-link text-sm uppercase tracking-wide">FAQ</a>
+                <a href="book.html" class="btn-primary py-2 px-6 rounded-full text-sm">Book a ride</a>
             </div>
 
             <button class="md:hidden" id="mobile-menu-btn">
@@ -52,84 +52,77 @@
         <a href="#services" class="nav-link">Services</a>
         <a href="#how-it-works" class="nav-link">How it works</a>
         <a href="#faq" class="nav-link">FAQ</a>
-        <a href="about.html" class="nav-link">About us</a>
-        <a href="contact.html" class="nav-link">Contact</a>
         <a href="book.html" class="btn-primary justify-center mt-4">Book a ride</a>
     </div>
 
     <!-- Hero Section -->
-    <section class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden bg-ink text-white">
+    <section class="hero-section text-white">
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80" alt="Professional Driver" class="w-full h-full object-cover opacity-40">
-            <div class="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/60 to-ink"></div>
+            <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80" alt="Professional Driving" class="w-full h-full object-cover">
+            <div class="hero-overlay"></div>
         </div>
 
-        <div class="container relative z-10 py-12">
-            <div class="max-w-3xl">
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <span class="trust-chip bg-gold text-ink text-xs py-1 px-3 uppercase font-black"><i data-lucide="shield-check" class="w-3 h-3"></i> Private Rides</span>
-                </div>
+        <div class="container max-w-[1240px] relative z-10">
+            <div class="flex flex-col gap-8">
+                <div>
+                    <h1 class="hero-headline mb-4">
+                        Reliable private rides from <span class="text-gold">Mbarara</span>—and beyond.
+                    </h1>
+                    <p class="text-lg md:text-xl text-white/80 max-w-xl mb-8 font-medium">
+                        Premium airport transfers, city rides, and special hire services tailored for your comfort.
+                    </p>
 
-                <h1 class="text-4xl md:text-7xl font-bold mb-6 leading-tight">
-                    Reliable private rides from <span class="text-gold">Mbarara</span>—and beyond.
-                </h1>
-
-                <div class="hidden md:flex flex-wrap gap-3 mb-8">
-                    <span class="trust-chip text-ink"><i data-lucide="check-circle" class="w-4 h-4 text-gold"></i> Fixed fares</span>
-                    <span class="trust-chip text-ink"><i data-lucide="shield-check" class="w-4 h-4 text-gold"></i> Professional drivers</span>
-                    <span class="trust-chip text-ink"><i data-lucide="clock" class="w-4 h-4 text-gold"></i> On-time guarantee</span>
-                </div>
-
-                <div class="md:hidden space-y-3 mb-8">
-                    <div class="flex items-center gap-3 text-sm font-semibold text-white/80">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-gold"></i> Fixed fares
-                    </div>
-                    <div class="flex items-center gap-3 text-sm font-semibold text-white/80">
-                        <i data-lucide="shield-check" class="w-5 h-5 text-gold"></i> Professional drivers
-                    </div>
-                    <div class="flex items-center gap-3 text-sm font-semibold text-white/80">
-                        <i data-lucide="clock" class="w-5 h-5 text-gold"></i> On-time guarantee
+                    <div class="flex flex-wrap gap-4 mb-2">
+                        <div class="trust-chip">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-gold"></i>
+                            <span>Fixed fares — <span class="opacity-70 font-normal">No surge pricing</span></span>
+                        </div>
+                        <div class="trust-chip">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-gold"></i>
+                            <span>Professional drivers — <span class="opacity-70 font-normal">Vetted & experienced</span></span>
+                        </div>
+                        <div class="trust-chip">
+                            <i data-lucide="clock" class="w-4 h-4 text-gold"></i>
+                            <span>On-time guarantee — <span class="opacity-70 font-normal">Your time, our priority</span></span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Quote Form Card -->
-                <div class="bg-white p-5 md:p-6 rounded-2xl shadow-2xl w-full max-w-5xl text-ink">
-                    <form action="book.html" method="GET" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
-                        <div class="form-group mb-0">
-                            <label class="form-label">Pickup</label>
-                            <input type="text" name="pickup" placeholder="Enter location" class="form-input" required>
-                        </div>
-                        <div class="form-group mb-0">
-                            <label class="form-label">Destination</label>
-                            <input type="text" name="destination" placeholder="Enter destination" class="form-input" required>
-                        </div>
-                        <div class="flex gap-4 col-span-1 md:col-span-2 lg:col-span-2">
-                            <div class="form-group mb-0 flex-1">
-                                <label class="form-label">Date</label>
-                                <input type="date" name="date" class="form-input px-2" required>
+                <div class="w-full">
+                    <div class="quote-card text-ink">
+                        <form action="book.html" method="GET" class="quote-form-grid">
+                            <div class="form-group">
+                                <label>Pickup</label>
+                                <input type="text" name="pickup" placeholder="Enter location" class="form-input" required>
                             </div>
-                            <div class="form-group mb-0 flex-1">
-                                <label class="form-label">Time</label>
-                                <input type="time" name="time" class="form-input px-2" required>
+                            <div class="form-group">
+                                <label>Destination</label>
+                                <input type="text" name="destination" placeholder="Enter destination" class="form-input" required>
                             </div>
-                        </div>
-                        <div class="form-group mb-0">
-                            <label class="form-label">Passengers</label>
-                            <select name="passengers" class="form-input">
-                                <option value="1">1 Passenger</option>
-                                <option value="2">2 Passengers</option>
-                                <option value="3">3 Passengers</option>
-                                <option value="4+">4+ Passengers</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn-primary w-full h-[46px] justify-center mt-2 md:mt-0">
-                            Get quote <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </button>
-                    </form>
-                </div>
-
-                <div class="mt-6 flex flex-col sm:row gap-4">
-                     <a href="https://wa.me/256700000000" class="btn-outline border-white/20 text-white hover:bg-white/10 w-full md:w-auto justify-center">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" name="date" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Time</label>
+                                <input type="time" name="time" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Passengers</label>
+                                <select name="passengers" class="form-input">
+                                    <option value="1">1 Passenger</option>
+                                    <option value="2">2 Passengers</option>
+                                    <option value="3">3 Passengers</option>
+                                    <option value="4+">4+ Passengers</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary w-full h-[52px]">
+                                Get quote
+                            </button>
+                        </form>
+                    </div>
+                    <a href="https://wa.me/256700000000" class="whatsapp-banner-btn">
                         <i data-lucide="message-circle" class="w-5 h-5"></i> Chat on WhatsApp
                     </a>
                 </div>
