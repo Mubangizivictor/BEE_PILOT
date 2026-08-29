@@ -10,6 +10,10 @@ This is the secure shared backend for BeePilot. It replaces browser-only localSt
 - Lets the owner manually record MTN MoMo, Airtel Money, or bank payments.
 - Creates an immutable receipt record after payment confirmation.
 
+## Deployment
+
+Cloudflare Workers Builds is connected to this repository with `backend` as its root directory. Every push to `main` triggers the Worker deployment.
+
 ## Never commit secrets
 
 Run these only in your own terminal after creating a Cloudflare Worker project:
@@ -17,8 +21,6 @@ Run these only in your own terminal after creating a Cloudflare Worker project:
 ```bash
 cd backend
 npm install
-npx wrangler d1 create beepilot-db
-# put the returned database_id into wrangler.toml
 npx wrangler d1 execute beepilot-db --remote --file=schema.sql
 npx wrangler secret put GOOGLE_MAPS_API_KEY
 npx wrangler secret put ADMIN_TOKEN
