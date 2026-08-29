@@ -11,58 +11,110 @@ export default {
       return new Response(null, { headers: corsHeaders });
     }
 
+    // Helper: Check Admin Auth
+    const isAdmin = (req) => {
+      const auth = req.headers.get("Authorization");
+      if (!auth) return false;
+      try {
+        const token = JSON.parse(atob(auth.split(" ")[1]));
+        return token.role === 'admin' && token.exp > Date.now();
+      } catch (e) { return false; }
+    };
+
     try {
-      // Public: Save Booking
-      if (url.pathname === "/bookings" && request.method === "POST") {
-        const booking = await request.json();
-        await env.DB.prepare(
-          "INSERT INTO bookings (id, customerName, customerPhone, pickupLocation, destination, date, time, passengers, bags, serviceType, totalFare, depositAmount, status, paymentMethod, notes, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        ).bind(
-          booking.id, booking.customerName, booking.customerPhone, booking.pickupLocation, booking.destination,
-          booking.date, booking.time, booking.passengers, booking.bags, booking.serviceType, booking.totalFare,
-          booking.depositAmount, 'awaiting_confirmation', booking.paymentMethod, booking.notes, new Date().toISOString()
-        ).run();
-        return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      // --- PUBLIC ROUTES ---
+
+      // GET Fare Settings
+      if (url.pathname === "/fare-settings" && request.method === "GET") {
+        const row = await env.DB.prepare("SELECT configValue FROM fare_settings WHERE configKey = 'default_fares' AND isActive = 1").first();
+        return new Response(row.configValue, { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
-      // Public: Get Booking by ID
+      // POST Create Booking
+      if (url.pathname === "/bookings" && request.method === "POST") {
+        const b = await request.json();
+        const token = crypto.randomUUID();
+
+        await env.DB.prepare(`
+          INSERT INTO bookings (
+            id, token, customerName, customerPhone, pickupLocation, destination,
+            date, time, passengers, bags, serviceType, totalFare, depositAmount,
+            status, notes, distanceKm, durationMins, fareSnapshot
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'awaiting_payment', ?, ?, ?, ?)
+        `).bind(
+          b.id, token, b.customerName, b.customerPhone, b.pickupLocation, b.destination,
+          b.date, b.time, b.passengers, b.bags || 0, b.serviceType, b.totalFare, b.depositAmount,
+          b.notes || '', b.distanceKm, b.durationMins, JSON.stringify(b.fareSnapshot)
+        ).run();
+
+        return new Response(JSON.stringify({ success: true, token }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
+      }
+
+      // GET Booking by ID (Public Token)
       if (url.pathname.startsWith("/bookings/") && request.method === "GET") {
         const id = url.pathname.split("/").pop();
         const booking = await env.DB.prepare("SELECT * FROM bookings WHERE id = ?").bind(id).first();
         if (!booking) return new Response("Not Found", { status: 404, headers: corsHeaders });
-        return new Response(JSON.stringify(booking), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+        // Fetch payment status
+        const payment = await env.DB.prepare("SELECT * FROM payments WHERE bookingId = ?").bind(id).first();
+
+        return new Response(JSON.stringify({ ...booking, payment }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
       }
 
-      // Admin Auth
+      // --- ADMIN ROUTES ---
+
+      // POST Admin Login
       if (url.pathname === "/admin/login" && request.method === "POST") {
         const { pin } = await request.json();
         if (pin === env.ADMIN_PIN) {
-          // Simple token for demo, in production use JWT
           const token = btoa(JSON.stringify({ role: 'admin', exp: Date.now() + 86400000 }));
           return new Response(JSON.stringify({ token }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
         }
         return new Response("Unauthorized", { status: 401, headers: corsHeaders });
       }
 
-      // Admin: Get All Bookings
-      if (url.pathname === "/admin/bookings" && request.method === "GET") {
-        const auth = request.headers.get("Authorization");
-        if (!auth) return new Response("Unauthorized", { status: 401, headers: corsHeaders });
-
-        const bookings = await env.DB.prepare("SELECT * FROM bookings ORDER BY createdAt DESC").all();
-        return new Response(JSON.stringify(bookings.results), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      // GET Admin Stats
+      if (url.pathname === "/admin/stats" && isAdmin(request)) {
+        const bookings = await env.DB.prepare("SELECT COUNT(*) as total, SUM(totalFare) as revenue FROM bookings").first();
+        const pending = await env.DB.prepare("SELECT COUNT(*) as count FROM bookings WHERE status = 'awaiting_payment'").first();
+        return new Response(JSON.stringify({ ...bookings, pending: pending.count }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
-      // Admin: Confirm Payment
-      if (url.pathname === "/admin/payments/confirm" && request.method === "POST") {
-        const { bookingId } = await request.json();
-        await env.DB.prepare("UPDATE bookings SET status = 'paid', paymentConfirmed = 1 WHERE id = ?").bind(bookingId).run();
-        return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      // GET All Bookings
+      if (url.pathname === "/admin/bookings" && isAdmin(request)) {
+        const { results } = await env.DB.prepare("SELECT * FROM bookings ORDER BY createdAt DESC").all();
+        return new Response(JSON.stringify(results), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+
+      // POST Confirm Payment
+      if (url.pathname === "/admin/payments/confirm" && isAdmin(request)) {
+        const p = await request.json();
+        const paymentId = crypto.randomUUID();
+
+        // Atomic update: Insert payment record and update booking status
+        const batch = [
+          env.DB.prepare("INSERT INTO payments (id, bookingId, method, amount, transactionRef, status, verifiedBy, verifiedAt, ownerNote) VALUES (?, ?, ?, ?, ?, 'confirmed', 'admin', CURRENT_TIMESTAMP, ?)")
+            .bind(paymentId, p.bookingId, p.method, p.amount, p.transactionRef, p.note || ''),
+          env.DB.prepare("UPDATE bookings SET status = 'confirmed' WHERE id = ?").bind(p.bookingId)
+        ];
+
+        await env.DB.batch(batch);
+
+        // Log activity
+        await env.DB.prepare("INSERT INTO audit_logs (action, entityType, entityId, userId, details) VALUES ('CONFIRM_PAYMENT', 'BOOKING', ?, 'admin', ?)")
+          .bind(p.bookingId, `Confirmed UGX ${p.amount} via ${p.method}`).run();
+
+        return new Response(JSON.stringify({ success: true, paymentId }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
       return new Response("Not Found", { status: 404, headers: corsHeaders });
     } catch (e) {
-      return new Response(e.message, { status: 500, headers: corsHeaders });
+      return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
   },
 };

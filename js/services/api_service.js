@@ -41,12 +41,12 @@ export class ApiService {
         });
     }
 
-    static async confirmPayment(bookingId) {
+    static async confirmPayment(paymentData) {
         const token = sessionStorage.getItem('bp_admin_token');
         return this.request('/admin/payments/confirm', {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify({ bookingId })
+            body: JSON.stringify(paymentData)
         });
     }
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Book your ride | BEEPILOT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -21,8 +21,6 @@
     </script>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5_VaBar37U6SBxImMelVEQrrYPdxDviI&libraries=places"></script>
 </head>
 <body class="bg-ivory text-ink min-h-screen overflow-x-hidden">
     <!-- Header -->
@@ -35,8 +33,9 @@
                 <span class="text-2xl font-black tracking-tighter">BEEPILOT</span>
             </a>
             <div class="flex items-center gap-4">
-                <span class="text-sm font-semibold text-text-muted hidden md:block">Need help? +256 700 000 000</span>
-                <a href="index.html" class="nav-link">Cancel</a>
+                <a href="index.html" class="nav-link text-sm font-bold flex items-center gap-1">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+                </a>
             </div>
         </nav>
     </header>
@@ -49,141 +48,155 @@
                     <h1 class="text-3xl md:text-4xl font-bold mb-8">Book your ride</h1>
 
                     <!-- Mobile Map (Visible only on small screens) -->
-                    <div class="lg:hidden w-full h-48 rounded-xl overflow-hidden mb-8 border border-border shadow-inner">
-                        <div id="map-mobile" class="w-full h-full"></div>
+                    <div class="lg:hidden w-full h-48 rounded-2xl overflow-hidden mb-8 border border-border shadow-inner relative">
+                        <div id="map-mobile" class="w-full h-full bg-gray-100"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
                     </div>
 
-                    <form id="booking-form" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                            <div class="form-group col-span-2">
-                                <label class="form-label">Pickup Location (From)</label>
+                    <form id="booking-form" class="space-y-6 pb-20 md:pb-0">
+                        <div class="space-y-6">
+                            <div class="form-group">
+                                <label class="form-label">Pickup Location</label>
                                 <div class="relative">
                                     <i data-lucide="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
                                     <input type="text" id="pickupLocation" placeholder="Enter pickup address" class="form-input pl-10" required>
                                 </div>
                             </div>
 
-                            <div class="form-group col-span-2">
-                                <label class="form-label">Destination (To)</label>
+                            <div class="form-group">
+                                <label class="form-label">Destination</label>
                                 <div class="relative">
                                     <i data-lucide="navigation-2" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
                                     <input type="text" id="destination" placeholder="Enter destination address" class="form-input pl-10" required>
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4 col-span-2">
-                                <div class="form-group mb-0">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="form-group">
                                     <label class="form-label">Date</label>
                                     <input type="date" id="date" class="form-input" required>
                                 </div>
-                                <div class="form-group mb-0">
+                                <div class="form-group">
                                     <label class="form-label">Time</label>
                                     <input type="time" id="time" class="form-input" required>
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4 col-span-2">
-                                <div class="form-group mb-0">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="form-group">
                                     <label class="form-label">Passengers</label>
                                     <select id="passengers" class="form-input">
                                         <option value="1">1 Passenger</option>
                                         <option value="2">2 Passengers</option>
                                         <option value="3">3 Passengers</option>
                                         <option value="4">4 Passengers</option>
-                                        <option value="5+">5+ (Special)</option>
+                                        <option value="5+">5+ Passengers</option>
                                     </select>
                                 </div>
-                                <div class="form-group mb-0">
+                                <div class="form-group">
                                     <label class="form-label">Bags</label>
                                     <select id="bags" class="form-input">
                                         <option value="0">No bags</option>
-                                        <option value="1">1 Large</option>
-                                        <option value="2">2 Large</option>
-                                        <option value="3+">3+ Large</option>
+                                        <option value="1">1 Bag</option>
+                                        <option value="2">2 Bags</option>
+                                        <option value="3+">3+ Bags</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="form-group col-span-2">
+                            <div class="form-group">
                                 <label class="form-label">Ride Type</label>
                                 <select id="serviceType" class="form-input">
-                                    <option value="cityIntercity">City & Intercity</option>
+                                    <option value="standard">Standard Ride</option>
                                     <option value="airportTransfer">Airport Transfer</option>
+                                    <option value="intercity">Intercity Trip</option>
                                     <option value="specialHire">Special Hire</option>
+                                    <option value="family">Family Travel</option>
+                                    <option value="corporate">Corporate</option>
                                 </select>
                             </div>
 
-                            <div class="form-group col-span-2">
+                            <div class="form-group">
                                 <label class="form-label">Full Name</label>
                                 <input type="text" id="customerName" placeholder="Enter your name" class="form-input" required>
                             </div>
 
-                            <div class="form-group col-span-2">
+                            <div class="form-group">
                                 <label class="form-label">Phone Number</label>
-                                <input type="tel" id="customerPhone" placeholder="e.g. 0700 000 000" class="form-input" required>
+                                <input type="tel" id="customerPhone" placeholder="07XX XXX XXX" class="form-input" required>
                             </div>
 
-                            <div class="form-group col-span-2">
+                            <div class="form-group">
                                 <label class="form-label">Notes (Optional)</label>
-                                <textarea id="notes" placeholder="Extra luggage, child seat, etc." class="form-input h-24 resize-none"></textarea>
+                                <textarea id="notes" placeholder="Any special requests?" class="form-input h-24 resize-none"></textarea>
                             </div>
                         </div>
 
                         <!-- Quote Display Area -->
-                        <div id="quote-area" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div class="card bg-navy text-white border-none mb-6">
-                                <div class="flex justify-between items-start mb-4">
-                                    <div>
-                                        <p class="text-blue-300 text-xs font-bold uppercase tracking-widest mb-1">Estimated Fare</p>
-                                        <h2 class="text-3xl font-black text-gold" id="display-fare">UGX 0</h2>
+                        <div id="quote-area" class="hidden space-y-4">
+                            <div class="card bg-navy text-white p-6 border-none overflow-hidden relative">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                                <div class="relative z-10">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <p class="text-gold text-[10px] font-black uppercase tracking-widest mb-1">Estimated Fare</p>
+                                            <h2 class="text-4xl font-black" id="display-fare">UGX 0</h2>
+                                        </div>
+                                        <span class="badge badge-gold">Verified Quote</span>
                                     </div>
-                                    <span class="badge badge-gold">Fixed Fare</span>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
-                                    <div>
-                                        <p class="text-blue-300 text-[10px] font-bold uppercase mb-1">Distance</p>
-                                        <p class="font-bold" id="display-distance">-- km</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-blue-300 text-[10px] font-bold uppercase mb-1">Duration</p>
-                                        <p class="font-bold" id="display-duration">-- mins</p>
+                                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                                        <div>
+                                            <p class="text-white/40 text-[10px] font-bold uppercase mb-1">Distance</p>
+                                            <p class="font-bold text-sm" id="display-distance">-- km</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-white/40 text-[10px] font-bold uppercase mb-1">Duration</p>
+                                            <p class="font-bold text-sm" id="display-duration">-- mins</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="flex items-start gap-3 p-4 bg-gold/10 rounded-xl border border-gold/20 mb-6">
-                                <i data-lucide="info" class="w-5 h-5 text-gold shrink-0"></i>
-                                <p class="text-xs text-navy/80 leading-relaxed">
-                                    <strong>Fixed fare. No hidden charges.</strong> The price includes all taxes, fuel, and tolls. Tolls for Entebbe Expressway are covered in airport transfers.
+                            <div class="flex items-start gap-3 p-4 bg-gold/5 rounded-xl border border-gold/10">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-gold shrink-0"></i>
+                                <p class="text-[11px] text-navy/70 leading-relaxed font-medium">
+                                    <strong>Fixed fare protection.</strong> Includes fuel, tolls, and wait time. Price is final upon payment verification.
                                 </p>
                             </div>
                         </div>
 
-                        <div id="loading-state" class="hidden py-4 text-center">
-                            <div class="inline-block w-6 h-6 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
-                            <p class="text-sm font-semibold mt-2">Calculating your route...</p>
+                        <div id="loading-state" class="hidden py-6 text-center">
+                            <div class="inline-block w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
+                            <p class="text-sm font-bold text-navy/60 mt-3">Analyzing best route...</p>
                         </div>
 
-                        <div id="error-state" class="hidden p-4 bg-red-50 text-red-700 rounded-xl border border-red-100 mb-6 flex items-center gap-3">
+                        <div id="error-state" class="hidden p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 flex items-center gap-3">
                             <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                            <p class="text-sm font-semibold" id="error-message">Unable to calculate route. Please check your locations.</p>
+                            <p class="text-xs font-bold" id="error-message">Unable to calculate route. Try a different address.</p>
                         </div>
 
-                        <button type="submit" id="submit-btn" class="btn-primary w-full h-[56px] justify-center text-lg">
-                            Get quote
+                        <button type="submit" id="submit-btn" class="btn-primary w-full py-4 text-lg font-black shadow-xl">
+                            Request Quote
                         </button>
                     </form>
                 </div>
             </div>
 
             <!-- Right Side: Map -->
-            <div class="map-area hidden lg:block">
+            <div class="map-area hidden lg:block bg-gray-50 relative">
                 <div id="map" class="w-full h-full"></div>
-                <!-- Custom Map Overlay for Visual Style -->
-                <div class="absolute inset-0 pointer-events-none border-l border-border"></div>
+                <div class="absolute inset-0 pointer-events-none shadow-[inset_1px_0_0_0_rgba(0,0,0,0.05)]"></div>
             </div>
         </div>
     </main>
+
+    <!-- Map Scripts Loader -->
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b[maps]||(b[maps]={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",q+".stat");a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?(console.warn(p+" only loads once. Ignoring:",g),d[l]=d[l]):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+            key: "YOUR_BROWSER_KEY_IF_AVAILABLE", // Restricted browser key
+            v: "weekly",
+        });
+    </script>
 
     <script type="module">
         import { BookingRepository } from './js/repositories/booking_repository.js';
@@ -193,165 +206,118 @@
         const bookingRepo = new BookingRepository();
         const quoteService = new RouteQuoteService();
 
-        let map, directionsService, directionsRenderer;
+        let map, directionsRenderer, directionsService;
         let autocompletePickup, autocompleteDest;
 
-        const initMap = () => {
-            const mbarara = { lat: -0.6022, lng: 30.6582 };
-            const mapStyles = [
-                { "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#000000" }, { "lightness": 40 }] },
-                { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#000000" }, { "lightness": 16 }] },
-                { "featureType": "all", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] },
-                { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] },
-                { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 17 }, { "weight": 1.2 }] },
-                { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 20 }] },
-                { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 21 }] },
-                { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#000000" }, { "lightness": 17 }] },
-                { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }, { "lightness": 29 }, { "weight": 0.2 }] },
-                { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 18 }] },
-                { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 16 }] },
-                { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 19 }] },
-                { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#000000" }, { "lightness": 17 }] }
-            ];
-
-            map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 12,
-                center: mbarara,
-                styles: mapStyles
-            });
-
-            // Mobile Map
-            const mapMobileEl = document.getElementById("map-mobile");
-            if (mapMobileEl) {
-                const mapMobile = new google.maps.Map(mapMobileEl, {
-                    zoom: 10,
-                    center: mbarara,
-                    styles: mapStyles,
-                    disableDefaultUI: true
-                });
-
-                const mobileDirectionsRenderer = new google.maps.DirectionsRenderer({
-                    map: mapMobile,
-                    polylineOptions: { strokeColor: "#F2B928", strokeWeight: 4 }
-                });
-
-                window.mobileDirectionsRenderer = mobileDirectionsRenderer;
-            }
-
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer({
-                map: map,
-                polylineOptions: {
-                    strokeColor: "#F2B928",
-                    strokeWeight: 5
-                }
-            });
-
-            const options = {
-                componentRestrictions: { country: "ug" },
-                fields: ["formatted_address", "geometry", "name"],
-            };
-
-            autocompletePickup = new google.maps.places.Autocomplete(document.getElementById('pickupLocation'), options);
-            autocompleteDest = new google.maps.places.Autocomplete(document.getElementById('destination'), options);
-
-            autocompletePickup.addListener('place_changed', calculateRoute);
-            autocompleteDest.addListener('place_changed', calculateRoute);
-        };
-
-        const calculateRoute = async () => {
-            const origin = document.getElementById('pickupLocation').value;
-            const destination = document.getElementById('destination').value;
-
-            if (!origin || !destination) return;
-
-            document.getElementById('loading-state').classList.remove('hidden');
-            document.getElementById('quote-area').classList.add('hidden');
-            document.getElementById('error-state').classList.add('hidden');
-            document.getElementById('submit-btn').disabled = true;
+        async function init() {
+            lucide.createIcons();
 
             try {
-                const result = await directionsService.route({
-                    origin: origin,
-                    destination: destination,
-                    travelMode: google.maps.TravelMode.DRIVING,
+                const { Map } = await google.maps.importLibrary("maps");
+                const { Autocomplete } = await google.maps.importLibrary("places");
+                const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
+
+                const center = { lat: 0.3476, lng: 32.5825 }; // Kampala
+                const styles = [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#333333" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#fefefe" }, { "lightness": 20 }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 20 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#ffffff" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#e9e9e9" }, { "lightness": 17 }] }];
+
+                map = new Map(document.getElementById("map"), {
+                    center, zoom: 12, styles, disableDefaultUI: true
                 });
 
-                directionsRenderer.setDirections(result);
-                if (window.mobileDirectionsRenderer) {
-                    window.mobileDirectionsRenderer.setDirections(result);
-                }
+                const mobileMap = new Map(document.getElementById("map-mobile"), {
+                    center, zoom: 10, styles, disableDefaultUI: true
+                });
 
-                const route = result.routes[0].legs[0];
-                const distanceKm = route.distance.value / 1000;
-                const durationMins = route.duration.value / 60;
+                directionsService = new DirectionsService();
+                directionsRenderer = new DirectionsRenderer({
+                    map, polylineOptions: { strokeColor: "#F2B928", strokeWeight: 6 }
+                });
 
-                const serviceType = document.getElementById('serviceType').value;
-                const quote = await quoteService.calculateQuote(serviceType, origin, destination, { distanceKm, durationMins });
+                const mobileRenderer = new DirectionsRenderer({
+                    map: mobileMap, polylineOptions: { strokeColor: "#F2B928", strokeWeight: 4 }
+                });
 
-                document.getElementById('display-fare').textContent = formatCurrency(quote.fare);
-                document.getElementById('display-distance').textContent = `${distanceKm.toFixed(1)} km`;
-                document.getElementById('display-duration').textContent = `${Math.round(durationMins)} mins`;
+                const options = { componentRestrictions: { country: "ug" }, fields: ["formatted_address", "geometry"] };
+                autocompletePickup = new Autocomplete(document.getElementById('pickupLocation'), options);
+                autocompleteDest = new Autocomplete(document.getElementById('destination'), options);
 
-                document.getElementById('quote-area').classList.remove('hidden');
-                document.getElementById('submit-btn').textContent = "Proceed to Booking";
-                document.getElementById('submit-btn').disabled = false;
+                const updateRoute = async () => {
+                    const pickup = document.getElementById('pickupLocation').value;
+                    const dest = document.getElementById('destination').value;
+                    if (!pickup || !dest) return;
 
-                // Save temporary data
-                window.lastQuote = { ...quote, pickup: origin, destination, distanceKm, durationMins };
+                    document.getElementById('loading-state').classList.remove('hidden');
+                    document.getElementById('quote-area').classList.add('hidden');
+                    document.getElementById('error-state').classList.add('hidden');
+                    document.getElementById('submit-btn').disabled = true;
 
-            } catch (error) {
-                console.error(error);
-                document.getElementById('error-state').classList.remove('hidden');
-                document.getElementById('submit-btn').textContent = "Get quote";
-                document.getElementById('submit-btn').disabled = false;
-            } finally {
-                document.getElementById('loading-state').classList.add('hidden');
+                    try {
+                        const response = await directionsService.route({
+                            origin: pickup, destination: dest, travelMode: 'DRIVING'
+                        });
+
+                        directionsRenderer.setDirections(response);
+                        mobileRenderer.setDirections(response);
+
+                        const route = response.routes[0].legs[0];
+                        const quote = await quoteService.calculateQuote(
+                            document.getElementById('serviceType').value,
+                            route.distance.value / 1000,
+                            route.duration.value / 60
+                        );
+
+                        document.getElementById('display-fare').textContent = formatCurrency(quote.totalFare);
+                        document.getElementById('display-distance').textContent = `${quote.distanceKm} km`;
+                        document.getElementById('display-duration').textContent = `${quote.durationMins} mins`;
+
+                        document.getElementById('quote-area').classList.remove('hidden');
+                        document.getElementById('submit-btn').textContent = "Confirm Details";
+                        window.currentQuote = quote;
+                    } catch (e) {
+                        document.getElementById('error-state').classList.remove('hidden');
+                    } finally {
+                        document.getElementById('loading-state').classList.add('hidden');
+                        document.getElementById('submit-btn').disabled = false;
+                    }
+                };
+
+                autocompletePickup.addListener('place_changed', updateRoute);
+                autocompleteDest.addListener('place_changed', updateRoute);
+                document.getElementById('serviceType').addEventListener('change', updateRoute);
+
+            } catch (err) {
+                console.error("Maps Init Error:", err);
             }
-        };
+        }
 
         document.getElementById('booking-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            if (document.getElementById('submit-btn').textContent === "Proceed to Booking") {
-                    const bookingData = {
-                        id: bookingRepo.generateId(),
-                        customerName: document.getElementById('customerName').value,
-                        customerPhone: document.getElementById('customerPhone').value,
-                        pickupLocation: document.getElementById('pickupLocation').value,
-                        destination: document.getElementById('destination').value,
-                        date: document.getElementById('date').value,
-                        time: document.getElementById('time').value,
-                        passengers: document.getElementById('passengers').value,
-                        bags: document.getElementById('bags').value,
-                        serviceType: document.getElementById('serviceType').value,
-                        notes: document.getElementById('notes').value,
-                        totalFare: window.lastQuote.fare,
-                        depositAmount: window.lastQuote.deposit,
-                        status: 'pending'
-                    };
-
-                localStorage.setItem('pending_booking', JSON.stringify(bookingData));
-                window.location.href = 'booking-confirmation.html';
-            } else {
-                await calculateRoute();
+            if (!window.currentQuote) {
+                alert("Please select pickup and destination first.");
+                return;
             }
+
+            const booking = {
+                id: bookingRepo.generateId(),
+                customerName: document.getElementById('customerName').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                pickupLocation: document.getElementById('pickupLocation').value,
+                destination: document.getElementById('destination').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                passengers: document.getElementById('passengers').value,
+                bags: document.getElementById('bags').value,
+                serviceType: document.getElementById('serviceType').value,
+                notes: document.getElementById('notes').value,
+                ...window.currentQuote
+            };
+
+            // Save to IndexedDB/LocalStorage for persistence
+            localStorage.setItem('pending_booking', JSON.stringify(booking));
+            window.location.href = 'booking-confirmation.html';
         });
 
-        // Initialize
-        window.onload = () => {
-            initMap();
-            lucide.createIcons();
-
-            // Check for URL params
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('pickup')) document.getElementById('pickupLocation').value = params.get('pickup');
-            if (params.get('destination')) document.getElementById('destination').value = params.get('destination');
-            if (params.get('date')) document.getElementById('date').value = params.get('date');
-            if (params.get('time')) document.getElementById('time').value = params.get('time');
-            if (params.get('passengers')) document.getElementById('passengers').value = params.get('passengers');
-            if (params.get('service')) document.getElementById('serviceType').value = params.get('service');
-        };
+        init();
     </script>
 </body>
 </html>

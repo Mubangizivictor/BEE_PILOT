@@ -142,7 +142,12 @@
                 <div class="lg:col-span-2 card p-0 overflow-hidden">
                     <div class="p-5 md:p-6 border-b border-border flex justify-between items-center">
                         <h2 class="text-lg md:text-xl font-bold">Recent Bookings</h2>
-                        <button class="text-xs font-bold text-gold hover:underline">View all</button>
+                        <div class="flex items-center gap-4">
+                            <button id="export-csv-btn" class="text-xs font-bold text-navy hover:text-gold flex items-center gap-1">
+                                <i data-lucide="download" class="w-3 h-3"></i> Export CSV
+                            </button>
+                            <button class="text-xs font-bold text-gold hover:underline">View all</button>
+                        </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="data-table w-full">
@@ -380,29 +385,68 @@
         };
 
         window.confirmPayment = async (id) => {
-            if (!confirm("Are you sure you want to confirm this payment? This will update the status to PAID and generate a receipt.")) return;
+            const b = currentBookings.find(x => x.id === id);
+            if (!b) return;
+
+            const amount = prompt(`Confirm payment amount for ${b.customerName}:`, b.depositAmount || b.totalFare);
+            if (amount === null) return;
+
+            const ref = prompt("Enter Transaction Reference (e.g. MoMo ID or Bank Ref):", "");
+            if (ref === null) return;
 
             try {
-                await ApiService.confirmPayment(id);
+                await ApiService.confirmPayment({
+                    bookingId: id,
+                    method: b.paymentMethod || 'manual',
+                    amount: Number(amount),
+                    transactionRef: ref,
+                    note: 'Verified via Admin Dashboard'
+                });
                 alert("Payment confirmed successfully.");
                 loadDashboard();
                 closeDrawer();
             } catch (error) {
                 console.error(error);
-                // Local fallback
-                const b = currentBookings.find(x => x.id === id);
-                if (b) {
-                    b.status = 'paid';
-                    b.paymentConfirmed = true;
-                    const all = JSON.parse(localStorage.getItem('beepilot_bookings') || '[]');
-                    const idx = all.findIndex(x => x.id === id);
-                    if (idx !== -1) all[idx] = b;
-                    localStorage.setItem('beepilot_bookings', JSON.stringify(all));
-                    loadDashboard();
-                    closeDrawer();
-                }
+                alert("Failed to confirm payment: " + error.message);
             }
         };
+
+        // CSV Export Logic
+        document.getElementById('export-csv-btn').addEventListener('click', () => {
+            if (currentBookings.length === 0) {
+                alert("No data to export.");
+                return;
+            }
+
+            const headers = ['ID', 'Date', 'Time', 'Customer', 'Phone', 'Pickup', 'Destination', 'Status', 'Total Fare', 'Deposit'];
+            const rows = currentBookings.map(b => [
+                b.id,
+                b.date,
+                b.time,
+                b.customerName,
+                `"${b.customerPhone}"`,
+                `"${b.pickupLocation}"`,
+                `"${b.destination}"`,
+                b.status,
+                b.totalFare,
+                b.depositAmount
+            ]);
+
+            const csvContent = [
+                headers.join(','),
+                ...rows.map(row => row.join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `beepilot_bookings_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
 
         loadDashboard();
         lucide.createIcons();

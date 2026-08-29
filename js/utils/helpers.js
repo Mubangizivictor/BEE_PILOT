@@ -2,6 +2,7 @@
  * Utility functions for formatting and common tasks
  */
 export const formatCurrency = (amount) => {
+    if (amount === undefined || amount === null) return 'UGX 0';
     return new Intl.NumberFormat('en-UG', {
         style: 'currency',
         currency: 'UGX',
@@ -11,11 +12,13 @@ export const formatCurrency = (amount) => {
 };
 
 export const formatDate = (dateStr) => {
+    if (!dateStr) return '---';
     const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
     return new Date(dateStr).toLocaleDateString('en-US', options);
 };
 
 export const formatTime = (timeStr) => {
+    if (!timeStr) return '---';
     // timeStr is usually "HH:mm"
     const [hours, minutes] = timeStr.split(':');
     const h = parseInt(hours);
@@ -24,22 +27,14 @@ export const formatTime = (timeStr) => {
     return `${h12}:${minutes} ${ampm}`;
 };
 
-export const generateBookingMessage = (booking) => {
-    const fareStr = formatCurrency(booking.totalFare);
-    const depositStr = formatCurrency(booking.depositAmount);
-
-    return `*BeePilot Booking Request*
-Ref: ${booking.id}
----
-*Customer:* ${booking.customerName}
-*Phone:* ${booking.customerPhone}
-*Service:* ${booking.serviceType}
-*Route:* ${booking.pickupLocation} to ${booking.destination}
-*Date:* ${booking.date} at ${booking.time}
-*Details:* ${booking.passengers} pax, ${booking.bags} bags
----
-*Total Fare:* ${fareStr}
-*Deposit Required:* ${depositStr}
----
-Please confirm availability.`;
+export const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 };

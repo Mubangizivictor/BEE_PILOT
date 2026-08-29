@@ -1,67 +1,65 @@
 import { FareRepository } from '../repositories/fare_repository.js';
 
 /**
- * Service for calculating route fares and estimates using Uber-like logic
+ * Service for calculating route fares using BeePilot's D1-backed fare engine
  */
 export class RouteQuoteService {
     constructor() {
         this.fareRepo = new FareRepository();
     }
 
-    /**
-     * Calculates the quote based on service type, distance and duration.
-     * Formula: Base Fare + (Distance * Rate) + (Time * Rate) + Booking Fee
-     *
-     * @param {string} serviceType
-     * @param {string} pickup
-     * @param {string} destination
-     * @param {Object|null} mapResult - { distanceKm: number, durationMins: number }
-     */
-    async calculateQuote(serviceType, pickup, destination, mapResult = null) {
-        const settings = this.fareRepo.getSettings();
+    async calculateQuote(serviceType, distanceKm, durationMins, options = {}) {
+        const settings = await this.fareRepo.getSettings();
 
         let fare = 0;
-        let distanceStr = "---";
-        let durationStr = "---";
+        let breakdown = {};
 
-        if (serviceType === 'airportTransfer') {
-            fare = settings.airportFixedRate;
-            distanceStr = mapResult ? `${mapResult.distanceKm.toFixed(1)} km` : "approx. 270 km";
-            durationStr = mapResult ? `${Math.round(mapResult.durationMins)} mins` : "4h 30m";
-        } else if (serviceType === 'specialHire') {
+        // 1. Calculate base pricing
+        const isIntercity = distanceKm > settings.intercityThresholdKm;
+
+        if (serviceType === 'specialHire') {
             fare = settings.specialHireDayRate;
-            distanceStr = "12 hours limit";
-            durationStr = "Full Day";
+            breakdown = { type: 'Special Hire Day Rate', amount: fare };
         } else {
-            // Uber-like Dynamic Pricing
-            const distance = mapResult ? mapResult.distanceKm : 5; // Default 5km for preview
-            const duration = mapResult ? mapResult.durationMins : (distance * 2.5); // Estimate 2.5 mins per km if missing
+            const base = isIntercity ? settings.intercityBase : settings.baseFare;
+            const ratePerKm = isIntercity ? settings.intercityPerKm : settings.perKm;
+            const ratePerMin = settings.perMin;
 
-            // Formula: Base + (KM * PerKm) + (Min * PerMin) + Booking Fee
-            fare = settings.baseFare +
-                   (distance * settings.perKmRate) +
-                   (duration * (settings.perMinuteRate || 300)) +
-                   (settings.bookingFee || 2000);
+            const distanceCharge = distanceKm * ratePerKm;
+            const timeCharge = durationMins * ratePerMin;
+
+            fare = base + distanceCharge + timeCharge;
+
+            // Apply Return Trip Factor if requested
+            if (options.isReturnTrip) {
+                fare *= settings.returnTripFactor;
+            }
+
+            // Apply Night Surcharge (9 PM - 5 AM)
+            const hour = new Date().getHours();
+            if (hour >= 21 || hour < 5) {
+                const surcharge = fare * settings.nightSurchargeRate;
+                fare += surcharge;
+                breakdown.nightSurcharge = Math.round(surcharge);
+            }
 
             // Enforce Minimum Fare
             if (fare < settings.minFare) {
                 fare = settings.minFare;
             }
-
-            distanceStr = `${distance.toFixed(1)} km`;
-            durationStr = `${Math.round(duration)} mins`;
         }
 
-        // Round to nearest 500 UGX
-        fare = Math.round(fare / 500) * 500;
-        const deposit = Math.round((fare * (settings.depositPercentage / 100)) / 500) * 500;
+        // Round to nearest 100 UGX for clean pricing
+        fare = Math.round(fare / 100) * 100;
+        const deposit = Math.round((fare * settings.depositRate) / 100) * 100;
 
         return {
-            fare,
-            distance: distanceStr,
-            duration: durationStr,
-            deposit: deposit,
-            balance: fare - deposit
+            totalFare: fare,
+            depositAmount: deposit,
+            balance: fare - deposit,
+            distanceKm: distanceKm.toFixed(1),
+            durationMins: Math.round(durationMins),
+            fareSnapshot: settings // Save settings version for booking record
         };
     }
 }
