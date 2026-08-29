@@ -45,7 +45,7 @@ body, html {
     color: var(--text-primary);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
     position: relative;
 }
@@ -328,21 +328,19 @@ header {
 
 /* Hero & Quote Form Refinements */
 .hero-section {
-    min-height: 600px;
+    min-height: 650px;
     height: auto;
-    max-height: 700px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     position: relative;
     overflow: hidden;
-    padding: 120px 0 80px;
+    padding: 112px 0 48px;
 }
 
 @media (max-width: 768px) {
     .hero-section {
         min-height: 100vh;
-        max-height: none;
         padding: 100px 0 60px;
     }
 }
@@ -355,11 +353,11 @@ header {
 }
 
 .hero-headline {
-    font-size: clamp(2.5rem, 5vw, 4.75rem);
-    line-height: 1.1;
-    max-width: 900px;
+    font-size: clamp(2.25rem, 4.2vw, 4rem);
+    line-height: 1.12;
+    max-width: 640px;
     font-weight: 800;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     color: var(--white);
 }
 
@@ -379,7 +377,7 @@ header {
 .quote-card {
     background: var(--white);
     border-radius: 1.25rem;
-    padding: 2rem;
+    padding: 1.5rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     width: 100%;
 }
@@ -416,7 +414,7 @@ header {
 
 .whatsapp-banner-btn {
     width: 100%;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     border: 2px solid var(--white);
     color: var(--white);
     background: transparent;
