@@ -21,6 +21,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const bookingForm = document.getElementById('booking-form');
     let currentBookingData = {};
+    let autocompletePickup, autocompleteDest;
+
+    // Initialize Google Maps Autocomplete
+    const initAutocomplete = () => {
+        if (typeof google === 'undefined') return;
+
+        const options = {
+            componentRestrictions: { country: "ug" },
+            fields: ["address_components", "geometry", "name"],
+        };
+
+        const pickupInput = document.getElementById('pickupLocation');
+        const destInput = document.getElementById('destination');
+
+        if (pickupInput) {
+            autocompletePickup = new google.maps.places.Autocomplete(pickupInput, options);
+            autocompletePickup.addListener("place_changed", updateFareDisplay);
+        }
+
+        if (destInput) {
+            autocompleteDest = new google.maps.places.Autocomplete(destInput, options);
+            autocompleteDest.addListener("place_changed", updateFareDisplay);
+        }
+    };
+
+    // Calculate distance and duration using Google Distance Matrix
+    const getRouteData = (origin, destination) => {
+        return new Promise((resolve) => {
+            if (typeof google === 'undefined' || !origin || !destination) {
+                resolve(null);
+                return;
+            }
+
+            const service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix(
+                {
+                    origins: [origin],
+                    destinations: [destination],
+                    travelMode: google.maps.TravelMode.DRIVING,
+                    unitSystem: google.maps.UnitSystem.METRIC,
+                },
+                (response, status) => {
+                    if (status === "OK" && response.rows[0].elements[0].status === "OK") {
+                        const distanceInMeters = response.rows[0].elements[0].distance.value;
+                        const durationInSeconds = response.rows[0].elements[0].duration.value;
+                        resolve({
+                            distanceKm: distanceInMeters / 1000,
+                            durationMins: durationInSeconds / 60
+                        });
+                    } else {
+                        resolve(null);
+                    }
+                }
+            );
+        });
+    };
 
     // Navigation logic
     const showStep = (stepNumber) => {
@@ -56,11 +112,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fare calculation trigger
     const updateFareDisplay = async () => {
-        const pickup = document.getElementById('pickupLocation').value;
-        const dest = document.getElementById('destination').value;
+        const pickup = document.getElementById('pickupLocation')?.value;
+        const dest = document.getElementById('destination')?.value;
 
-        const quote = await quoteService.calculateQuote(currentBookingData.serviceType, pickup, dest);
-        document.getElementById('display-fare').textContent = formatCurrency(quote.fare);
+        if (!pickup || !dest) return;
+
+        // Show loading state
+        const fareDisplay = document.getElementById('display-fare');
+        if (fareDisplay) fareDisplay.textContent = "Calculating...";
+
+        const routeData = await getRouteData(pickup, dest);
+        const quote = await quoteService.calculateQuote(currentBookingData.serviceType, pickup, dest, routeData);
+
+        if (fareDisplay) fareDisplay.textContent = formatCurrency(quote.fare);
         currentBookingData.quote = quote;
     };
 
@@ -71,6 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 2 Submission (Details -> Review)
     bookingForm?.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        if (!currentBookingData.quote) {
+            alert("Please wait for the fare to be calculated.");
+            return;
+        }
 
         currentBookingData = {
             ...currentBookingData,
@@ -109,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Final Action: Send to WhatsApp
     document.getElementById('send-whatsapp')?.addEventListener('click', () => {
-        // Save to local storage for demo purposes
+        // Save to local storage
         bookingRepo.save({
             ...currentBookingData,
             status: 'awaiting_confirmation',
@@ -118,17 +187,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const message = generateBookingMessage(currentBookingData);
         const encodedMessage = encodeURIComponent(message);
-        const whatsappNumber = "256700000000"; // Configurable
+        const whatsappNumber = "256700000000";
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
         window.open(whatsappUrl, '_blank');
-
-        // Redirect to a success/info page or show confirmation
-        alert("Booking saved! Redirecting to WhatsApp...");
+        window.location.href = `booking-confirmation.html?ref=${currentBookingData.id}`;
     });
 
-    // Initialize Lucide icons for dynamic elements if any
+    // Initialize Lucide icons
     if (window.lucide) {
         window.lucide.createIcons();
     }
+
+    initAutocomplete();
 });

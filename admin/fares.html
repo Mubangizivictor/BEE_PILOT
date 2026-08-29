@@ -24,13 +24,13 @@
             <a href="dashboard.html" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
             </a>
-            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
+            <a href="dashboard.html" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
                 <i data-lucide="calendar" class="w-5 h-5"></i> Bookings
             </a>
             <a href="fares.html" class="sidebar-link active bg-honey text-charcoal flex items-center gap-3 p-3 rounded-xl font-bold transition-all">
                 <i data-lucide="settings-2" class="w-5 h-5"></i> Fare Settings
             </a>
-            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
+            <a href="fixed-routes.html" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
                 <i data-lucide="map" class="w-5 h-5"></i> Fixed Routes
             </a>
         </nav>
@@ -45,111 +45,171 @@
         <header class="flex justify-between items-center mb-12">
             <div>
                 <h1 class="text-3xl font-black">Fare Settings</h1>
-                <p class="text-gray-500">Configure rates and pricing rules</p>
+                <p class="text-gray-500">Configure Uber-like pricing rules</p>
             </div>
-            <button class="btn-primary py-2 px-6 shadow-lg shadow-honey/20">Save Changes</button>
+            <button id="save-settings" class="btn-primary py-2 px-6 shadow-lg shadow-honey/20">Save Changes</button>
         </header>
 
         <div class="grid lg:grid-cols-2 gap-8">
             <!-- Base Rates -->
-            <div class="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
+            <div class="bg-white rounded-[1rem] p-6 border border-gray-100 shadow-sm">
                 <h3 class="text-lg font-black mb-6 flex items-center gap-2">
-                    <i data-lucide="gauge" class="text-honey"></i> Base & Distance Rates
-                </h3>
-                <div class="space-y-6">
-                    <div>
-                        <label>Minimum Town Fare (UGX)</label>
-                        <input type="number" value="10000" class="font-bold">
-                    </div>
-                    <div>
-                        <label>Base Fare (UGX)</label>
-                        <input type="number" value="5000" class="font-bold">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label>Rate per KM (Town)</label>
-                            <input type="number" value="2500" class="font-bold">
-                        </div>
-                        <div>
-                            <label>Rate per KM (Outstation)</label>
-                            <input type="number" value="3500" class="font-bold">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Special Hire Rates -->
-            <div class="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
-                <h3 class="text-lg font-black mb-6 flex items-center gap-2">
-                    <i data-lucide="award" class="text-honey"></i> Special Hire & Packages
+                    <i data-lucide="gauge" class="text-honey"></i> Dynamic Pricing Components
                 </h3>
                 <div class="space-y-6">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label>Half-Day Price (UGX)</label>
-                            <input type="number" value="250000" class="font-bold">
+                            <label>Base Fare (UGX)</label>
+                            <input type="number" id="baseFare" class="font-bold">
                         </div>
                         <div>
-                            <label>Full-Day Price (UGX)</label>
-                            <input type="number" value="450000" class="font-bold">
+                            <label>Booking Fee (UGX)</label>
+                            <input type="number" id="bookingFee" class="font-bold">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label>Rate per KM (UGX)</label>
+                            <input type="number" id="perKmRate" class="font-bold">
+                        </div>
+                        <div>
+                            <label>Rate per Minute (UGX)</label>
+                            <input type="number" id="perMinuteRate" class="font-bold">
                         </div>
                     </div>
                     <div>
-                        <label>Included Hours (Full Day)</label>
-                        <input type="number" value="12" class="font-bold">
-                    </div>
-                    <div>
-                        <label>Overtime Charge per Hour (UGX)</label>
-                        <input type="number" value="30000" class="font-bold">
+                        <label>Minimum Trip Fare (UGX)</label>
+                        <input type="number" id="minFare" class="font-bold">
                     </div>
                 </div>
             </div>
 
-            <!-- Extras & Deposit -->
-            <div class="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
+            <!-- Fixed Packages -->
+            <div class="bg-white rounded-[1rem] p-6 border border-gray-100 shadow-sm">
                 <h3 class="text-lg font-black mb-6 flex items-center gap-2">
-                    <i data-lucide="plus-circle" class="text-honey"></i> Extras & Deposits
+                    <i data-lucide="award" class="text-honey"></i> Fixed & Daily Rates
                 </h3>
                 <div class="space-y-6">
+                    <div>
+                        <label>Entebbe Airport Fixed Rate (UGX)</label>
+                        <input type="number" id="airportFixedRate" class="font-bold">
+                    </div>
+                    <div>
+                        <label>Special Hire Full-Day Price (UGX)</label>
+                        <input type="number" id="specialHireDayRate" class="font-bold">
+                    </div>
                     <div>
                         <label>Default Deposit (%)</label>
-                        <input type="number" value="30" class="font-bold">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label>Night Surcharge (%)</label>
-                            <input type="number" value="15" class="font-bold">
-                        </div>
-                        <div>
-                            <label>Waiting Charge / 15m (UGX)</label>
-                            <input type="number" value="5000" class="font-bold">
-                        </div>
+                        <input type="number" id="depositPercentage" class="font-bold">
                     </div>
                 </div>
             </div>
 
             <!-- Calculator Preview -->
-            <div class="bg-charcoal text-white rounded-[2rem] p-8 shadow-xl">
-                <h3 class="text-lg font-black mb-6 text-honey">Fare Calculator Preview</h3>
-                <div class="space-y-4 mb-8">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-400">Formula:</span>
-                        <span class="font-mono text-[10px]">Base + (KM * Rate) + Extras</span>
+            <div class="bg-charcoal text-white rounded-[1rem] p-6 shadow-xl lg:col-span-2">
+                <h3 class="text-lg font-black mb-6 text-honey text-center">Fare Calculator Preview</h3>
+                <div class="grid md:grid-cols-3 gap-8 items-center">
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase font-bold">Sample Distance</p>
+                            <p class="text-xl font-black">15.0 KM</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase font-bold">Sample Time</p>
+                            <p class="text-xl font-black">30 Minutes</p>
+                        </div>
                     </div>
-                    <div class="flex justify-between font-bold">
-                        <span>Estimated Fare</span>
-                        <span class="text-honey">UGX 35,000</span>
+                    <div class="space-y-4 text-center border-x border-white/10 px-8">
+                        <p class="text-gray-400 text-sm">Formula: [Base + (KM * Rate) + (Min * Rate) + Fee]</p>
+                        <div class="bg-white/5 p-4 rounded-xl">
+                            <span class="text-gray-400 text-xs block mb-1">Estimated Fare</span>
+                            <span class="text-honey font-black text-3xl" id="preview-fare">UGX 0</span>
+                        </div>
                     </div>
-                </div>
-                <div class="p-4 bg-white/5 rounded-xl border border-white/10 text-xs text-gray-400">
-                    Calculated prices are rounded to the nearest 500 UGX.
+                    <div class="space-y-4 text-right">
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase font-bold">Required Deposit</p>
+                            <p class="text-xl font-black text-sage" id="preview-deposit">UGX 0</p>
+                        </div>
+                        <p class="text-[10px] text-gray-500 italic">Rounded to nearest 500 UGX</p>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <script type="module">
+        import { FareRepository } from '../js/repositories/fare_repository.js';
+
         lucide.createIcons();
+        const fareRepo = new FareRepository();
+
+        // Load settings
+        const settings = fareRepo.getSettings();
+
+        const inputs = {
+            baseFare: document.getElementById('baseFare'),
+            bookingFee: document.getElementById('bookingFee'),
+            perKmRate: document.getElementById('perKmRate'),
+            perMinuteRate: document.getElementById('perMinuteRate'),
+            minFare: document.getElementById('minFare'),
+            airportFixedRate: document.getElementById('airportFixedRate'),
+            specialHireDayRate: document.getElementById('specialHireDayRate'),
+            depositPercentage: document.getElementById('depositPercentage')
+        };
+
+        // Fill inputs
+        Object.keys(inputs).forEach(key => {
+            if (inputs[key]) {
+                inputs[key].value = settings[key] || 0;
+            }
+        });
+
+        function updatePreview() {
+            const base = parseInt(inputs.baseFare.value) || 0;
+            const fee = parseInt(inputs.bookingFee.value) || 0;
+            const kmRate = parseInt(inputs.perKmRate.value) || 0;
+            const minRate = parseInt(inputs.perMinuteRate.value) || 0;
+            const minTrip = parseInt(inputs.minFare.value) || 0;
+            const depositPct = parseInt(inputs.depositPercentage.value) || 0;
+
+            // Sample: 15km, 30min
+            let fare = base + (15 * kmRate) + (30 * minRate) + fee;
+            if (fare < minTrip) fare = minTrip;
+
+            fare = Math.round(fare / 500) * 500;
+            const deposit = Math.round((fare * (depositPct / 100)) / 500) * 500;
+
+            document.getElementById('preview-fare').textContent = `UGX ${fare.toLocaleString()}`;
+            document.getElementById('preview-deposit').textContent = `UGX ${deposit.toLocaleString()}`;
+        }
+
+        // Listen for changes
+        Object.values(inputs).forEach(input => {
+            if (input) input.addEventListener('input', updatePreview);
+        });
+
+        updatePreview();
+
+        // Save functionality
+        document.getElementById('save-settings').addEventListener('click', () => {
+            const newSettings = {};
+            Object.keys(inputs).forEach(key => {
+                newSettings[key] = parseInt(inputs[key].value);
+            });
+
+            fareRepo.saveSettings(newSettings);
+
+            const btn = document.getElementById('save-settings');
+            const originalText = btn.textContent;
+            btn.textContent = 'Saved!';
+            btn.classList.replace('bg-honey', 'bg-sage');
+
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.replace('bg-sage', 'bg-honey');
+            }, 2000);
+        });
     </script>
 </body>
 </html>
