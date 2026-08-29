@@ -1,0 +1,115 @@
+:root {
+    --charcoal: #101417;
+    --midnight: #071526;
+    --honey-gold: #E9B536;
+    --ivory: #F8F6F1;
+    --sage: #79A985;
+    --warm-red: #C94C4C;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--ivory);
+    color: var(--charcoal);
+    scroll-behavior: smooth;
+}
+
+.bg-honey { background-color: var(--honey-gold); }
+.text-honey { color: var(--honey-gold); }
+.bg-charcoal { background-color: var(--charcoal); }
+.bg-midnight { background-color: var(--midnight); }
+.bg-sage { background-color: var(--sage); }
+
+.btn-primary {
+    background-color: var(--honey-gold);
+    color: var(--charcoal);
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 181, 54, 0.3);
+}
+
+.btn-outline {
+    border: 2px solid var(--charcoal);
+    color: var(--charcoal);
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: transparent;
+}
+
+.btn-outline:hover {
+    background-color: var(--charcoal);
+    color: white;
+}
+
+.glass-nav {
+    background: rgba(248, 246, 241, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(16, 20, 23, 0.05);
+}
+
+.card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    border: 1px solid rgba(16, 20, 23, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Stepper Animation */
+.step-content {
+    display: none;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.step-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Inputs */
+input, select, textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(16, 20, 23, 0.1);
+    background-color: white;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--honey-gold);
+    box-shadow: 0 0 0 3px rgba(233, 181, 54, 0.1);
+}
+
+label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--charcoal);
+}
