@@ -1,0 +1,12 @@
+name = "beepilot-api"
+main = "src/index.ts"
+compatibility_date = "2026-08-29"
+
+# Create the D1 database first, then replace this placeholder with its ID.
+[[d1_databases]]
+binding = "DB"
+database_name = "beepilot-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[vars]
+PUBLIC_ORIGIN = "https://victorbee.com"
