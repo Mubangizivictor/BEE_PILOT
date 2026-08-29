@@ -41,21 +41,70 @@
                 <a href="book.html" class="btn-primary py-2 px-6 rounded-full text-sm">Book a ride</a>
             </div>
 
-            <button class="md:hidden" id="mobile-menu-btn">
-                <i data-lucide="menu"></i>
+            <button class="md:hidden icon-btn" id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+                <i data-lucide="menu" aria-hidden="true"></i>
             </button>
         </nav>
     </header>
 
     <!-- Mobile Menu Container -->
-    <div id="mobile-menu" class="mobile-menu">
+    <div id="mobile-menu" class="mobile-menu" role="dialog" aria-modal="true" aria-label="Mobile navigation" aria-hidden="true">
         <a href="#services" class="nav-link">Services</a>
         <a href="#how-it-works" class="nav-link">How it works</a>
         <a href="#faq" class="nav-link">FAQ</a>
         <a href="book.html" class="btn-primary justify-center mt-4">Book a ride</a>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Mobile Landing Hero (Screen 1) — < md only -->
+    <div class="md:hidden">
+        <section class="hero-mobile">
+            <div class="hero-mobile-media">
+                <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80" alt="" aria-hidden="true">
+            </div>
+            <div class="hero-mobile-content animate-fade-up">
+                <h1 class="hero-mobile-headline animate-fade-up delay-1">
+                    Reliable rides from <span class="text-gold">Mbarara</span>.
+                </h1>
+                <p class="hero-mobile-subtitle animate-fade-up delay-2">
+                    Premium airport transfers, city rides, and special hire services tailored for your comfort.
+                </p>
+
+                <div class="trust-icon-row animate-fade-up delay-2">
+                    <div class="trust-icon-item">
+                        <span class="trust-icon-badge"><i data-lucide="check" aria-hidden="true"></i></span>
+                        <span class="trust-icon-label">Fixed fare</span>
+                        <span class="trust-icon-sub">No surge pricing</span>
+                    </div>
+                    <div class="trust-icon-item">
+                        <span class="trust-icon-badge"><i data-lucide="shield-check" aria-hidden="true"></i></span>
+                        <span class="trust-icon-label">Professional drivers</span>
+                        <span class="trust-icon-sub">Vetted &amp; experienced</span>
+                    </div>
+                    <div class="trust-icon-item">
+                        <span class="trust-icon-badge"><i data-lucide="clock" aria-hidden="true"></i></span>
+                        <span class="trust-icon-label">On-time guarantee</span>
+                        <span class="trust-icon-sub">Your time, our priority</span>
+                    </div>
+                </div>
+
+                <div class="animate-fade-up delay-3">
+                    <a href="book.html" class="btn-primary hero-mobile-cta">Book a ride</a>
+                    <a href="https://wa.me/256793128137" class="hero-mobile-whatsapp">
+                        <i data-lucide="message-circle" class="w-4 h-4" aria-hidden="true"></i> Chat on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </section>
+        <div class="hero-mobile-decor" aria-hidden="true">
+            <svg viewBox="0 0 400 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 40 C 80 5, 160 60, 240 30 S 380 5, 400 25" stroke="#F2B928" stroke-opacity="0.25" stroke-width="1.5"/>
+                <path d="M0 55 C 80 20, 160 70, 240 45 S 380 20, 400 40" stroke="#10233E" stroke-opacity="0.08" stroke-width="1.5"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Desktop Hero Section — md and up -->
+    <div class="hidden md:block">
     <section class="hero-section text-white">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80" alt="Professional Driving" class="w-full h-full object-cover">
@@ -65,14 +114,14 @@
         <div class="container relative z-10">
             <div class="flex flex-col gap-5">
                 <div>
-                    <h1 class="hero-headline mb-2">
-                        Reliable private rides from <span class="text-gold">Mbarara</span>—and beyond.
+                    <h1 class="hero-headline mb-2 animate-fade-up">
+                        Reliable rides from <span class="text-gold">Mbarara</span>.
                     </h1>
-                    <p class="text-lg md:text-xl text-white/80 max-w-xl mb-5 font-medium">
+                    <p class="text-lg md:text-xl text-white/80 max-w-xl mb-5 font-medium animate-fade-up delay-1">
                         Premium airport transfers, city rides, and special hire services tailored for your comfort.
                     </p>
 
-                    <div class="flex flex-wrap gap-4 mb-2">
+                    <div class="flex flex-wrap gap-4 mb-2 animate-fade-up delay-2">
                         <div class="trust-chip">
                             <i data-lucide="check-circle" class="w-4 h-4 text-gold"></i>
                             <span>Fixed fares — <span class="opacity-70 font-normal">No surge pricing</span></span>
@@ -89,7 +138,7 @@
                 </div>
 
                 <!-- Quote Form Card -->
-                <div class="w-full">
+                <div class="w-full animate-fade-up delay-3">
                     <div class="quote-card text-ink">
                         <form action="book.html" method="GET" class="quote-form-grid">
                             <div class="form-group">
@@ -129,6 +178,7 @@
             </div>
         </div>
     </section>
+    </div>
 
     <!-- Services Section -->
     <section id="services" class="section-padding bg-ivory">
@@ -334,18 +384,39 @@
             lucide.createIcons();
         }
 
+        function openMenu() {
+            mobileMenu.classList.add('active');
+            mobileMenu.setAttribute('aria-hidden', 'false');
+            menuBtn.setAttribute('aria-expanded', 'true');
+            menuBtn.setAttribute('aria-label', 'Close menu');
+            setMenuIcon('x');
+            const firstLink = mobileMenu.querySelector('.nav-link');
+            if (firstLink) firstLink.focus();
+        }
+
+        function closeMenu() {
+            mobileMenu.classList.remove('active');
+            mobileMenu.setAttribute('aria-hidden', 'true');
+            menuBtn.setAttribute('aria-expanded', 'false');
+            menuBtn.setAttribute('aria-label', 'Open menu');
+            setMenuIcon('menu');
+        }
+
         menuBtn.addEventListener('click', () => {
             const isOpen = mobileMenu.classList.contains('active');
-            mobileMenu.classList.toggle('active');
-            setMenuIcon(isOpen ? 'menu' : 'x');
+            isOpen ? closeMenu() : openMenu();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                closeMenu();
+                menuBtn.focus();
+            }
         });
 
         // Close menu when clicking a link
         document.querySelectorAll('#mobile-menu .nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                setMenuIcon('menu');
-            });
+            link.addEventListener('click', closeMenu);
         });
     </script>
 </body>

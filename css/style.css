@@ -452,3 +452,397 @@ header {
 button, a, input, select, textarea {
     min-height: 48px;
 }
+
+/* ==========================================================================
+   Motion — respect prefers-reduced-motion globally
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+    animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-up.delay-1 { animation-delay: 0.08s; }
+.animate-fade-up.delay-2 { animation-delay: 0.16s; }
+.animate-fade-up.delay-3 { animation-delay: 0.24s; }
+.animate-fade-up.delay-4 { animation-delay: 0.32s; }
+
+.btn-primary:active, .btn-outline:active, .sticky-cta-btn:active {
+    transform: scale(0.97);
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.is-shimmering {
+    background-image: linear-gradient(90deg, #eef0f2 25%, #f8f9fa 37%, #eef0f2 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   Safe area
+   ========================================================================== */
+.pb-safe {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+/* ==========================================================================
+   Mobile landing hero (Screen 1) — shown < md, desktop hero handles >= md
+   ========================================================================== */
+.hero-mobile {
+    position: relative;
+    background: var(--navy);
+    overflow: hidden;
+    padding: 96px 20px 44px;
+    border-radius: 0 0 46% 46% / 0 0 36px 36px;
+    min-height: 560px;
+    display: flex;
+    align-items: stretch;
+}
+
+.hero-mobile-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-mobile-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 78% 50%;
+    opacity: 0.55;
+}
+
+.hero-mobile-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(16,35,62,0.97) 38%, rgba(16,35,62,0.55) 68%, rgba(16,35,62,0.35) 100%);
+}
+
+.hero-mobile-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 12px;
+    width: 100%;
+}
+
+.hero-mobile-headline {
+    font-size: clamp(1.9rem, 8vw, 2.5rem);
+    line-height: 1.14;
+    font-weight: 800;
+    color: var(--white);
+    max-width: 78%;
+}
+
+.hero-mobile-subtitle {
+    color: rgba(255,255,255,0.82);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    max-width: 85%;
+}
+
+.trust-icon-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.trust-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+.trust-icon-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--ivory);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.trust-icon-badge svg { color: var(--gold); width: 20px; height: 20px; }
+
+.trust-icon-label {
+    color: var(--white);
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.trust-icon-sub {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.68rem;
+    line-height: 1.2;
+}
+
+.hero-mobile-cta {
+    width: 100%;
+    font-size: 1.05rem;
+    padding: 1rem;
+    box-shadow: 0 12px 24px -8px rgba(242, 185, 40, 0.45);
+}
+
+.hero-mobile-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-height: 44px;
+}
+
+.hero-mobile-whatsapp:active { opacity: 0.7; }
+
+.hero-mobile-decor {
+    position: relative;
+    height: 64px;
+    margin-top: -20px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.hero-mobile-decor svg { position: absolute; left: -10%; bottom: -30px; width: 120%; }
+
+/* ==========================================================================
+   Header icon button (back / hamburger) — guaranteed 44px target
+   ========================================================================== */
+.icon-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.6rem;
+    color: var(--text-primary);
+    background: transparent;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.icon-btn:hover, .icon-btn:active {
+    background: rgba(16, 22, 27, 0.06);
+}
+
+/* ==========================================================================
+   Booking layout (book.html)
+   ========================================================================== */
+.booking-container {
+    display: block;
+}
+
+@media (min-width: 1024px) {
+    .booking-container {
+        display: grid;
+        grid-template-columns: minmax(420px, 560px) 1fr;
+        min-height: calc(100vh - 64px);
+    }
+    .map-area {
+        position: sticky;
+        top: 64px;
+        height: calc(100vh - 64px);
+    }
+}
+
+/* Step indicator */
+.step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px 6px;
+}
+
+.step-track {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 280px;
+}
+
+.step-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    background: var(--white);
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.step-dot.is-active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+}
+
+.step-dot.is-done {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    margin: 0 4px;
+}
+
+.step-caption {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+}
+
+@media (min-width: 1024px) {
+    .step-indicator { display: none; }
+}
+
+/* Step panels: on mobile/tablet, only the active step's panel is shown */
+[data-step-panel] { display: none; }
+
+[data-active-step="1"] [data-step-panel="1"],
+[data-active-step="2"] [data-step-panel="2"] {
+    display: block;
+    animation: fadeSlideUp 0.4s ease-out both;
+}
+
+@media (min-width: 1024px) {
+    [data-step-panel] { display: block !important; animation: none !important; }
+}
+
+/* Sticky bottom CTA (mobile/tablet only) */
+.sticky-cta {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, var(--ivory) 60%, rgba(251,248,241,0));
+    padding: 20px 20px calc(16px + env(safe-area-inset-bottom));
+    margin: 0 -20px;
+    z-index: 20;
+}
+
+@media (min-width: 1024px) {
+    .sticky-cta {
+        position: static;
+        background: none;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+/* Route/map preview */
+.map-preview {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #eef0f2;
+}
+
+.map-preview-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 1rem;
+    background: var(--bg-secondary);
+}
+
+/* Fixed fare trust card */
+.fare-trust-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(242, 185, 40, 0.06);
+    border: 1px solid rgba(242, 185, 40, 0.2);
+    border-radius: 0.85rem;
+}
+
+.fare-trust-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 1px solid rgba(242, 185, 40, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* State banners: offline / maps unavailable */
+.state-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.state-banner.is-warning {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #FDE68A;
+}
+
+.state-banner.is-offline {
+    background: #F1F5F9;
+    color: #334155;
+    border: 1px solid #E2E8F0;
+}

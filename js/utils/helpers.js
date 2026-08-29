@@ -2,7 +2,7 @@
  * Utility functions for formatting and common tasks
  */
 export const formatCurrency = (amount) => {
-    if (amount === undefined || amount === null) return 'UGX 0';
+    if (amount === undefined || amount === null || Number.isNaN(amount)) return 'UGX 0';
     return new Intl.NumberFormat('en-UG', {
         style: 'currency',
         currency: 'UGX',

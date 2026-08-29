@@ -25,38 +25,62 @@
 <body class="bg-ivory text-ink min-h-screen overflow-x-hidden">
     <!-- Header -->
     <header class="fixed top-0 w-full z-50 bg-ivory border-b border-black/5">
-        <nav class="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-gold rounded flex items-center justify-center">
-                    <i data-lucide="navigation" class="text-ink w-5 h-5"></i>
-                </div>
-                <span class="text-xl font-black tracking-tighter">BEEPILOT</span>
-            </a>
-            <div class="flex items-center gap-4">
-                <a href="index.html" class="nav-link text-sm uppercase tracking-wide flex items-center gap-2">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+        <nav class="w-full max-w-[1240px] mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-1">
+                <a href="index.html" class="icon-btn" aria-label="Back to home">
+                    <i data-lucide="chevron-left" aria-hidden="true"></i>
+                </a>
+                <a href="index.html" class="flex items-center gap-2 ml-1">
+                    <div class="w-8 h-8 bg-gold rounded flex items-center justify-center">
+                        <i data-lucide="navigation" class="text-ink w-5 h-5"></i>
+                    </div>
+                    <span class="text-lg font-black tracking-tighter">BEEPILOT</span>
                 </a>
             </div>
+            <button class="icon-btn" id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+                <i data-lucide="menu" aria-hidden="true"></i>
+            </button>
         </nav>
     </header>
 
-    <main class="pt-20">
+    <!-- Mobile Menu Container -->
+    <div id="mobile-menu" class="mobile-menu" role="dialog" aria-modal="true" aria-label="Mobile navigation" aria-hidden="true">
+        <a href="index.html#services" class="nav-link">Services</a>
+        <a href="index.html#how-it-works" class="nav-link">How it works</a>
+        <a href="index.html#faq" class="nav-link">FAQ</a>
+        <a href="index.html" class="btn-primary justify-center mt-4">Home</a>
+    </div>
+
+    <!-- Step Indicator (mobile/tablet only) -->
+    <div class="step-indicator pt-16" data-step-indicator>
+        <div class="step-track">
+            <div class="step-dot is-active" data-step-dot="1">1</div>
+            <div class="step-line"></div>
+            <div class="step-dot" data-step-dot="2">2</div>
+            <div class="step-line"></div>
+            <div class="step-dot" data-step-dot="3">3</div>
+        </div>
+        <span class="step-caption" data-step-caption>1 of 3</span>
+    </div>
+
+    <main class="pt-4 lg:pt-20">
         <div class="booking-container">
             <!-- Left Side: Form -->
             <div class="p-5 md:p-16 overflow-y-auto w-full">
                 <div class="max-w-lg mx-auto lg:mx-0">
-                    <h1 class="text-3xl md:text-4xl font-bold mb-8">Book your ride</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-8 hidden lg:block">Book your ride</h1>
 
-                    <!-- Mobile Map (Visible only on small screens) -->
-                    <div class="lg:hidden w-full h-48 rounded-2xl overflow-hidden mb-8 border border-border shadow-inner relative">
-                        <div id="map-mobile" class="w-full h-full bg-gray-100"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+                    <div id="offline-banner" class="state-banner is-offline hidden mb-5">
+                        <i data-lucide="wifi-off" class="w-4 h-4 shrink-0"></i>
+                        <span>You're offline. Reconnect to get a live quote.</span>
                     </div>
 
-                    <form id="booking-form" class="space-y-6 pb-20 md:pb-0">
-                        <div class="space-y-6">
+                    <form id="booking-form" data-active-step="1">
+
+                        <!-- STEP 1: Trip details -->
+                        <div data-step-panel="1" class="space-y-5 animate-fade-up">
                             <div class="form-group">
-                                <label class="form-label">Pickup Location</label>
+                                <label class="form-label" for="pickupLocation">Pickup Location</label>
                                 <div class="relative">
                                     <i data-lucide="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
                                     <input type="text" id="pickupLocation" placeholder="Enter pickup address" class="form-input pl-10" required>
@@ -64,7 +88,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Destination</label>
+                                <label class="form-label" for="destination">Destination</label>
                                 <div class="relative">
                                     <i data-lucide="navigation-2" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted"></i>
                                     <input type="text" id="destination" placeholder="Enter destination address" class="form-input pl-10" required>
@@ -73,28 +97,103 @@
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="form-group">
-                                    <label class="form-label">Date</label>
+                                    <label class="form-label" for="date">Date</label>
                                     <input type="date" id="date" class="form-input" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Time</label>
+                                    <label class="form-label" for="time">Time</label>
                                     <input type="time" id="time" class="form-input" required>
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                <label class="form-label" for="passengers">Passengers</label>
+                                <select id="passengers" class="form-input">
+                                    <option value="1">1 Passenger</option>
+                                    <option value="2">2 Passengers</option>
+                                    <option value="3">3 Passengers</option>
+                                    <option value="4">4 Passengers</option>
+                                    <option value="5+">5+ Passengers</option>
+                                </select>
+                            </div>
+
+                            <!-- Compact route/map preview -->
+                            <div class="map-preview" id="map-mobile-wrapper">
+                                <div id="map-mobile" class="w-full h-full bg-gray-100"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none"></div>
+                                <div class="map-preview-empty" id="map-preview-empty">
+                                    <i data-lucide="map" class="w-5 h-5 text-gold"></i>
+                                    <span>Enter pickup &amp; destination to preview your route</span>
+                                </div>
+                            </div>
+
+                            <div id="maps-unavailable-banner" class="state-banner is-warning hidden">
+                                <i data-lucide="alert-triangle" class="w-4 h-4 shrink-0"></i>
+                                <span>Route preview is unavailable right now. You can still request a quote — we'll confirm the exact fare on WhatsApp.</span>
+                            </div>
+
+                            <!-- Quote Display Area -->
+                            <div id="quote-area" class="hidden space-y-4">
+                                <div class="card bg-navy text-white p-6 border-none overflow-hidden relative">
+                                    <div class="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                                    <div class="relative z-10">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <div>
+                                                <p class="text-gold text-[10px] font-black uppercase tracking-widest mb-1">Estimated Fare</p>
+                                                <h2 class="text-4xl font-black" id="display-fare">UGX 0</h2>
+                                            </div>
+                                            <span class="badge badge-gold">Verified Quote</span>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                                            <div>
+                                                <p class="text-white/40 text-[10px] font-bold uppercase mb-1">Distance</p>
+                                                <p class="font-bold text-sm" id="display-distance">-- km</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-white/40 text-[10px] font-bold uppercase mb-1">Duration</p>
+                                                <p class="font-bold text-sm" id="display-duration">-- mins</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="loading-state" class="hidden py-6 text-center">
+                                <div class="inline-block w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
+                                <p class="text-sm font-bold text-navy/60 mt-3">Analyzing best route...</p>
+                            </div>
+
+                            <div id="error-state" class="hidden p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 flex items-center gap-3">
+                                <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+                                <p class="text-xs font-bold" id="error-message">Unable to calculate route. Try a different address.</p>
+                            </div>
+
+                            <!-- Fixed fare trust card -->
+                            <div class="fare-trust-card">
+                                <span class="fare-trust-icon"><i data-lucide="tag" class="w-4 h-4 text-gold"></i></span>
+                                <div>
+                                    <p class="font-bold text-sm text-navy">Fixed fare</p>
+                                    <p class="text-xs text-text-muted mt-0.5">No surge pricing. What we quote is what you pay.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2: Ride & contact details -->
+                        <div data-step-panel="2" class="space-y-5">
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="form-group">
-                                    <label class="form-label">Passengers</label>
-                                    <select id="passengers" class="form-input">
-                                        <option value="1">1 Passenger</option>
-                                        <option value="2">2 Passengers</option>
-                                        <option value="3">3 Passengers</option>
-                                        <option value="4">4 Passengers</option>
-                                        <option value="5+">5+ Passengers</option>
+                                    <label class="form-label" for="serviceType">Ride Type</label>
+                                    <select id="serviceType" class="form-input">
+                                        <option value="standard">Standard Ride</option>
+                                        <option value="airportTransfer">Airport Transfer</option>
+                                        <option value="intercity">Intercity Trip</option>
+                                        <option value="specialHire">Special Hire</option>
+                                        <option value="family">Family Travel</option>
+                                        <option value="corporate">Corporate</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Bags</label>
+                                    <label class="form-label" for="bags">Bags</label>
                                     <select id="bags" class="form-input">
                                         <option value="0">No bags</option>
                                         <option value="1">1 Bag</option>
@@ -105,84 +204,36 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Ride Type</label>
-                                <select id="serviceType" class="form-input">
-                                    <option value="standard">Standard Ride</option>
-                                    <option value="airportTransfer">Airport Transfer</option>
-                                    <option value="intercity">Intercity Trip</option>
-                                    <option value="specialHire">Special Hire</option>
-                                    <option value="family">Family Travel</option>
-                                    <option value="corporate">Corporate</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Full Name</label>
+                                <label class="form-label" for="customerName">Full Name</label>
                                 <input type="text" id="customerName" placeholder="Enter your name" class="form-input" required>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Phone Number</label>
+                                <label class="form-label" for="customerPhone">Phone Number</label>
                                 <input type="tel" id="customerPhone" placeholder="07XX XXX XXX" class="form-input" required>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Notes (Optional)</label>
+                                <label class="form-label" for="notes">Notes (Optional)</label>
                                 <textarea id="notes" placeholder="Any special requests?" class="form-input h-24 resize-none"></textarea>
                             </div>
+
+                            <button type="button" class="btn-outline w-full justify-center" data-back-step>
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to trip details
+                            </button>
                         </div>
 
-                        <!-- Quote Display Area -->
-                        <div id="quote-area" class="hidden space-y-4">
-                            <div class="card bg-navy text-white p-6 border-none overflow-hidden relative">
-                                <div class="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-                                <div class="relative z-10">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <div>
-                                            <p class="text-gold text-[10px] font-black uppercase tracking-widest mb-1">Estimated Fare</p>
-                                            <h2 class="text-4xl font-black" id="display-fare">UGX 0</h2>
-                                        </div>
-                                        <span class="badge badge-gold">Verified Quote</span>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
-                                        <div>
-                                            <p class="text-white/40 text-[10px] font-bold uppercase mb-1">Distance</p>
-                                            <p class="font-bold text-sm" id="display-distance">-- km</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-white/40 text-[10px] font-bold uppercase mb-1">Duration</p>
-                                            <p class="font-bold text-sm" id="display-duration">-- mins</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-3 p-4 bg-gold/5 rounded-xl border border-gold/10">
-                                <i data-lucide="shield-check" class="w-5 h-5 text-gold shrink-0"></i>
-                                <p class="text-[11px] text-navy/70 leading-relaxed font-medium">
-                                    <strong>Fixed fare protection.</strong> Includes fuel, tolls, and wait time. Price is final upon payment verification.
-                                </p>
-                            </div>
+                        <!-- Sticky bottom CTA (mobile/tablet); static on desktop -->
+                        <div class="sticky-cta">
+                            <button type="submit" id="submit-btn" class="btn-primary sticky-cta-btn w-full py-4 text-lg font-black shadow-xl">
+                                Get my quote
+                            </button>
                         </div>
-
-                        <div id="loading-state" class="hidden py-6 text-center">
-                            <div class="inline-block w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
-                            <p class="text-sm font-bold text-navy/60 mt-3">Analyzing best route...</p>
-                        </div>
-
-                        <div id="error-state" class="hidden p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 flex items-center gap-3">
-                            <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                            <p class="text-xs font-bold" id="error-message">Unable to calculate route. Try a different address.</p>
-                        </div>
-
-                        <button type="submit" id="submit-btn" class="btn-primary w-full py-4 text-lg font-black shadow-xl">
-                            Request Quote
-                        </button>
                     </form>
                 </div>
             </div>
 
-            <!-- Right Side: Map -->
+            <!-- Right Side: Map (desktop only) -->
             <div class="map-area hidden lg:block bg-gray-50 relative">
                 <div id="map" class="w-full h-full"></div>
                 <div class="absolute inset-0 pointer-events-none shadow-[inset_1px_0_0_0_rgba(0,0,0,0.05)]"></div>
@@ -192,10 +243,68 @@
 
     <!-- Map Scripts Loader -->
     <script>
-        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b[maps]||(b[maps]={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",q+".stat");a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?(console.warn(p+" only loads once. Ignoring:",g),d[l]=d[l]):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b["maps"]||(b["maps"]={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",q+".stat");a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?(console.warn(p+" only loads once. Ignoring:",g),d[l]=d[l]):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
             key: "YOUR_BROWSER_KEY_IF_AVAILABLE", // Restricted browser key
             v: "weekly",
         });
+    </script>
+
+    <script>
+        lucide.createIcons();
+
+        // Mobile menu toggle logic (shared pattern with index.html)
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function setMenuIcon(name) {
+            const icon = menuBtn.querySelector('[data-lucide]');
+            if (icon) icon.setAttribute('data-lucide', name);
+            lucide.createIcons();
+        }
+
+        function openMenu() {
+            mobileMenu.classList.add('active');
+            mobileMenu.setAttribute('aria-hidden', 'false');
+            menuBtn.setAttribute('aria-expanded', 'true');
+            menuBtn.setAttribute('aria-label', 'Close menu');
+            setMenuIcon('x');
+            const firstLink = mobileMenu.querySelector('.nav-link');
+            if (firstLink) firstLink.focus();
+        }
+
+        function closeMenu() {
+            mobileMenu.classList.remove('active');
+            mobileMenu.setAttribute('aria-hidden', 'true');
+            menuBtn.setAttribute('aria-expanded', 'false');
+            menuBtn.setAttribute('aria-label', 'Open menu');
+            setMenuIcon('menu');
+        }
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.contains('active') ? closeMenu() : openMenu();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                closeMenu();
+                menuBtn.focus();
+            }
+        });
+
+        document.querySelectorAll('#mobile-menu .nav-link').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Offline / online resilience
+        const offlineBanner = document.getElementById('offline-banner');
+        function setOffline(isOffline) {
+            offlineBanner.classList.toggle('hidden', !isOffline);
+            const btn = document.getElementById('submit-btn');
+            if (btn) btn.disabled = isOffline;
+        }
+        window.addEventListener('offline', () => setOffline(true));
+        window.addEventListener('online', () => setOffline(false));
+        setOffline(!navigator.onLine);
     </script>
 
     <script type="module">
@@ -206,16 +315,59 @@
         const bookingRepo = new BookingRepository();
         const quoteService = new RouteQuoteService();
 
+        const bookingForm = document.getElementById('booking-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const stepDots = document.querySelectorAll('[data-step-dot]');
+        const stepCaption = document.querySelector('[data-step-caption]');
+        const backStepBtn = document.querySelector('[data-back-step]');
+
+        function updateSubmitLabel() {
+            const step = Number(bookingForm.dataset.activeStep);
+            submitBtn.textContent = step === 1 ? 'Get my quote' : 'Confirm booking';
+        }
+
+        function setStep(step) {
+            bookingForm.dataset.activeStep = String(step);
+            stepDots.forEach(dot => {
+                const n = Number(dot.dataset.stepDot);
+                dot.classList.toggle('is-active', n === step);
+                dot.classList.toggle('is-done', n < step);
+            });
+            if (stepCaption) stepCaption.textContent = `${step} of 3`;
+            updateSubmitLabel();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        if (backStepBtn) {
+            backStepBtn.addEventListener('click', () => setStep(1));
+        }
+
         let map, directionsRenderer, directionsService;
         let autocompletePickup, autocompleteDest;
+
+        function withTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Maps load timed out')), ms))
+            ]);
+        }
+
+        // Prefill from index.html's homepage quote form — must work regardless of
+        // whether Google Maps loads successfully, so it runs unconditionally.
+        const incomingParams = new URLSearchParams(window.location.search);
+        if (incomingParams.has('pickup')) document.getElementById('pickupLocation').value = incomingParams.get('pickup');
+        if (incomingParams.has('destination')) document.getElementById('destination').value = incomingParams.get('destination');
+        if (incomingParams.has('date')) document.getElementById('date').value = incomingParams.get('date');
+        if (incomingParams.has('time')) document.getElementById('time').value = incomingParams.get('time');
+        if (incomingParams.has('passengers')) document.getElementById('passengers').value = incomingParams.get('passengers');
 
         async function init() {
             lucide.createIcons();
 
             try {
-                const { Map } = await google.maps.importLibrary("maps");
-                const { Autocomplete } = await google.maps.importLibrary("places");
-                const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
+                const { Map } = await withTimeout(google.maps.importLibrary("maps"), 6000);
+                const { Autocomplete } = await withTimeout(google.maps.importLibrary("places"), 6000);
+                const { DirectionsService, DirectionsRenderer } = await withTimeout(google.maps.importLibrary("routes"), 6000);
 
                 const center = { lat: 0.3476, lng: 32.5825 }; // Kampala
                 const styles = [{ "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "saturation": 36 }, { "color": "#333333" }, { "lightness": 40 }] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "on" }, { "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [{ "color": "#fefefe" }, { "lightness": 20 }] }, { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 20 }] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }, { "lightness": 17 }] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#ffffff" }, { "lightness": 29 }, { "weight": 0.2 }] }, { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 18 }] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#ffffff" }, { "lightness": 16 }] }, { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#e9e9e9" }, { "lightness": 17 }] }];
@@ -246,10 +398,12 @@
                     const dest = document.getElementById('destination').value;
                     if (!pickup || !dest) return;
 
+                    document.getElementById('map-preview-empty').classList.add('hidden');
+                    document.getElementById('map-mobile-wrapper').classList.add('is-shimmering');
                     document.getElementById('loading-state').classList.remove('hidden');
                     document.getElementById('quote-area').classList.add('hidden');
                     document.getElementById('error-state').classList.add('hidden');
-                    document.getElementById('submit-btn').disabled = true;
+                    submitBtn.disabled = true;
 
                     try {
                         const response = await directionsService.route({
@@ -271,25 +425,18 @@
                         document.getElementById('display-duration').textContent = `${quote.durationMins} mins`;
 
                         document.getElementById('quote-area').classList.remove('hidden');
-                        document.getElementById('submit-btn').textContent = "Confirm Details";
                         window.currentQuote = quote;
                     } catch (e) {
                         document.getElementById('error-state').classList.remove('hidden');
+                        document.getElementById('map-preview-empty').classList.remove('hidden');
                     } finally {
                         document.getElementById('loading-state').classList.add('hidden');
-                        document.getElementById('submit-btn').disabled = false;
+                        document.getElementById('map-mobile-wrapper').classList.remove('is-shimmering');
+                        submitBtn.disabled = !navigator.onLine ? true : false;
                     }
                 };
 
-                // Handle incoming parameters from index.html
-                const params = new URLSearchParams(window.location.search);
-                if (params.has('pickup')) document.getElementById('pickupLocation').value = params.get('pickup');
-                if (params.has('destination')) document.getElementById('destination').value = params.get('destination');
-                if (params.has('date')) document.getElementById('date').value = params.get('date');
-                if (params.has('time')) document.getElementById('time').value = params.get('time');
-                if (params.has('passengers')) document.getElementById('passengers').value = params.get('passengers');
-
-                if (params.has('pickup') && params.has('destination')) {
+                if (incomingParams.has('pickup') && incomingParams.has('destination')) {
                     setTimeout(updateRoute, 1000);
                 }
 
@@ -297,14 +444,49 @@
                 autocompleteDest.addListener('place_changed', updateRoute);
                 document.getElementById('serviceType').addEventListener('change', updateRoute);
 
+                // "Get my quote" (step 1 -> step 2): ensure a route/quote exists first
+                submitBtn.addEventListener('click', async (e) => {
+                    if (Number(bookingForm.dataset.activeStep) !== 1) return;
+                    e.preventDefault();
+
+                    const pickupEl = document.getElementById('pickupLocation');
+                    const destEl = document.getElementById('destination');
+                    if (!pickupEl.value.trim()) { pickupEl.focus(); return; }
+                    if (!destEl.value.trim()) { destEl.focus(); return; }
+
+                    if (!window.currentQuote) {
+                        await updateRoute();
+                    }
+
+                    if (window.currentQuote) {
+                        setStep(2);
+                    }
+                });
+
             } catch (err) {
                 console.error("Maps Init Error:", err);
+                window.mapsUnavailable = true;
+                document.getElementById('maps-unavailable-banner').classList.remove('hidden');
+                document.getElementById('map-preview-empty').classList.add('hidden');
+
+                // Degrade gracefully: allow proceeding to step 2 without a computed quote
+                submitBtn.addEventListener('click', (e) => {
+                    if (Number(bookingForm.dataset.activeStep) !== 1) return;
+                    e.preventDefault();
+
+                    const pickupEl = document.getElementById('pickupLocation');
+                    const destEl = document.getElementById('destination');
+                    if (!pickupEl.value.trim()) { pickupEl.focus(); return; }
+                    if (!destEl.value.trim()) { destEl.focus(); return; }
+
+                    setStep(2);
+                });
             }
         }
 
         document.getElementById('booking-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!window.currentQuote) {
+            if (!window.currentQuote && !window.mapsUnavailable) {
                 alert("Please select pickup and destination first.");
                 return;
             }
@@ -329,6 +511,7 @@
             window.location.href = 'booking-confirmation.html';
         });
 
+        updateSubmitLabel();
         init();
     </script>
 </body>
