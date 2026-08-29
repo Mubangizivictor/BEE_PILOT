@@ -134,7 +134,7 @@
     <section id="services" class="section-padding bg-ivory">
         <div class="container">
             <div class="mb-12 md:text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Tailored Premium Services</h2>
+                <h2 class="font-bold mb-4">Tailored Premium Services</h2>
                 <p class="text-text-muted max-w-2xl mx-auto">From daily commutes to special occasions, we provide the highest standard of private transport.</p>
             </div>
 
@@ -205,22 +205,22 @@
     <!-- How it Works -->
     <section id="how-it-works" class="section-padding bg-white">
         <div class="container">
-            <h2 class="text-4xl font-bold text-center mb-16">How it works</h2>
+            <h2 class="font-bold text-center mb-16">How it works</h2>
             <div class="grid md:grid-cols-3 gap-12">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-gold rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">1</div>
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-gold rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-black transform group-hover:rotate-6 transition-transform">1</div>
                     <h4 class="text-xl font-bold mb-4">Book Online</h4>
-                    <p class="text-text-muted">Enter your trip details in our simple booking form to get a fixed quote instantly.</p>
+                    <p class="text-text-muted text-sm px-4">Enter your trip details in our simple booking form to get a fixed quote instantly.</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-navy text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">2</div>
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-navy text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-black transform group-hover:-rotate-6 transition-transform">2</div>
                     <h4 class="text-xl font-bold mb-4">Confirm & Pay</h4>
-                    <p class="text-text-muted">Confirm your ride via WhatsApp and make a manual payment to secure your booking.</p>
+                    <p class="text-text-muted text-sm px-4">Confirm your ride via WhatsApp and make a manual payment to secure your booking.</p>
                 </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-gold rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">3</div>
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-gold rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl font-black transform group-hover:rotate-6 transition-transform">3</div>
                     <h4 class="text-xl font-bold mb-4">Enjoy the Ride</h4>
-                    <p class="text-text-muted">Your professional driver will arrive on time to take you to your destination in comfort.</p>
+                    <p class="text-text-muted text-sm px-4">Your professional driver will arrive on time to take you to your destination in comfort.</p>
                 </div>
             </div>
         </div>
@@ -229,28 +229,34 @@
     <!-- FAQ Section -->
     <section id="faq" class="section-padding bg-ivory">
         <div class="container max-w-3xl">
-            <h2 class="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
             <div class="space-y-4">
-                <details class="group bg-white rounded-xl p-6 border border-border">
+                <details class="group bg-white rounded-xl p-6 border border-black/5 hover:border-gold/30 transition-all">
                     <summary class="flex justify-between items-center font-bold cursor-pointer list-none">
-                        How do I pay for my ride?
-                        <i data-lucide="plus" class="group-open:rotate-45 transition-transform text-gold"></i>
+                        <span>How do I pay for my ride?</span>
+                        <i data-lucide="chevron-down" class="group-open:rotate-180 transition-transform text-gold w-5 h-5"></i>
                     </summary>
-                    <p class="mt-4 text-text-muted">We accept manual payments via MTN MoMo, Airtel Money, and Bank transfers. You'll receive payment instructions after confirming your booking on WhatsApp.</p>
+                    <div class="mt-4 text-text-muted text-sm leading-relaxed">
+                        We accept manual payments via MTN MoMo, Airtel Money, and Bank transfers. After booking, you'll be redirected to a secure confirmation page with payment details, which are also sent to you via WhatsApp.
+                    </div>
                 </details>
-                <details class="group bg-white rounded-xl p-6 border border-border">
+                <details class="group bg-white rounded-xl p-6 border border-black/5 hover:border-gold/30 transition-all">
                     <summary class="flex justify-between items-center font-bold cursor-pointer list-none">
-                        Is the fare really fixed?
-                        <i data-lucide="plus" class="group-open:rotate-45 transition-transform text-gold"></i>
+                        <span>Is the fare really fixed?</span>
+                        <i data-lucide="chevron-down" class="group-open:rotate-180 transition-transform text-gold w-5 h-5"></i>
                     </summary>
-                    <p class="mt-4 text-text-muted">Yes! The quote you see when booking is the final price. No surge pricing, no hidden fees, and no surprises.</p>
+                    <div class="mt-4 text-text-muted text-sm leading-relaxed">
+                        Yes! The quote generated during booking is your final price. It includes fuel, driver fees, and waiting time. No surge pricing, even during peak hours or bad weather.
+                    </div>
                 </details>
-                <details class="group bg-white rounded-xl p-6 border border-border">
+                <details class="group bg-white rounded-xl p-6 border border-black/5 hover:border-gold/30 transition-all">
                     <summary class="flex justify-between items-center font-bold cursor-pointer list-none">
-                        Can I book for someone else?
-                        <i data-lucide="plus" class="group-open:rotate-45 transition-transform text-gold"></i>
+                        <span>Can I book for someone else?</span>
+                        <i data-lucide="chevron-down" class="group-open:rotate-180 transition-transform text-gold w-5 h-5"></i>
                     </summary>
-                    <p class="mt-4 text-text-muted">Absolutely. Just enter the passenger's details in the notes section or provide them when confirming via WhatsApp.</p>
+                    <div class="mt-4 text-text-muted text-sm leading-relaxed">
+                        Absolutely. Simply enter the passenger's name and contact information in the booking notes, or inform our dispatch team when confirming your ride on WhatsApp.
+                    </div>
                 </details>
             </div>
         </div>
@@ -298,11 +304,11 @@
                     <ul class="space-y-4 text-gray-400">
                         <li class="flex items-center gap-3">
                             <i data-lucide="phone" class="w-4 h-4 text-gold"></i>
-                            <span>+256 793 128 137</span>
+                            <a href="tel:+256793128137" class="hover:text-white transition-colors">+256 793 128 137</a>
                         </li>
                         <li class="flex items-center gap-3">
                             <i data-lucide="mail" class="w-4 h-4 text-gold"></i>
-                            <span>mubangizivic@gmail.com</span>
+                            <a href="mailto:mubangizivic@gmail.com" class="hover:text-white transition-colors">mubangizivic@gmail.com</a>
                         </li>
                         <li class="flex items-center gap-3">
                             <i data-lucide="map-pin" class="w-4 h-4 text-gold"></i>

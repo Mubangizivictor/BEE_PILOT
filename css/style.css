@@ -158,11 +158,15 @@ h2 {
 .badge-gold { background: rgba(242, 185, 40, 0.1); color: var(--gold); }
 
 /* Navigation & Layout */
-.glass-nav {
-    background: var(--nav-bg);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-    transition: var(--transition);
+/* Header */
+header {
+    height: 76px;
+    display: flex;
+    align-items: center;
+}
+
+.glass-nav nav {
+    height: 76px;
 }
 
 .nav-link {
@@ -181,11 +185,27 @@ h2 {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 24px;
+}
+
+@media (max-width: 1024px) {
+    .container { padding: 0 20px; }
+}
+
+@media (max-width: 640px) {
+    .container { padding: 0 16px; }
 }
 
 .section-padding {
-    padding: clamp(3rem, 8vw, 6rem) 0;
+    padding: 80px 0;
+}
+
+@media (max-width: 1024px) {
+    .section-padding { padding: 64px 0; }
+}
+
+@media (max-width: 640px) {
+    .section-padding { padding: 48px 0; }
 }
 
 /* Mobile Menu */
@@ -308,19 +328,22 @@ h2 {
 
 /* Hero & Quote Form Refinements */
 .hero-section {
-    min-height: 800px;
+    min-height: 600px;
+    height: auto;
+    max-height: 700px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    padding: 180px 0 120px; /* Increased top padding to fix overlapping */
+    padding: 120px 0 80px;
 }
 
 @media (max-width: 768px) {
     .hero-section {
         min-height: 100vh;
-        padding: 120px 0 60px;
+        max-height: none;
+        padding: 100px 0 60px;
     }
 }
 
@@ -332,11 +355,12 @@ h2 {
 }
 
 .hero-headline {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1.05;
+    font-size: clamp(2.5rem, 5vw, 4.75rem);
+    line-height: 1.1;
     max-width: 900px;
     font-weight: 800;
     margin-bottom: 1.5rem;
+    color: var(--white);
 }
 
 .trust-chip {
@@ -344,10 +368,10 @@ h2 {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 99px;
-    color: var(--white);
+    color: var(--ivory);
     font-size: 0.875rem;
     font-weight: 600;
 }
