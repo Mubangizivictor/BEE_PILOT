@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation | BeePilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-ivory min-h-screen">
+    <header class="fixed top-0 w-full z-50 glass-nav">
+        <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-honey rounded-xl flex items-center justify-center">
+                    <i data-lucide="navigation" class="text-charcoal w-6 h-6"></i>
+                </div>
+                <span class="text-2xl font-black tracking-tighter">BEEPILOT</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="text-sm font-bold hover:text-honey transition-colors">Home</a>
+                <a href="https://wa.me/256700000000" class="btn-primary py-2 px-4 text-xs">Support</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-xl mx-auto" id="confirmation-content">
+            <!-- Loading State -->
+            <div class="text-center py-20" id="loading-state">
+                <div class="animate-spin w-12 h-12 border-4 border-honey border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p class="text-gray-500 font-bold">Retrieving booking...</p>
+            </div>
+
+            <!-- Error State (Hidden) -->
+            <div class="text-center py-20 hidden" id="error-state">
+                <i data-lucide="alert-circle" class="w-16 h-16 text-warm-red mx-auto mb-4"></i>
+                <h2 class="text-2xl font-black mb-2">Booking not found</h2>
+                <p class="text-gray-500 mb-8">We couldn't find a booking with this reference.</p>
+                <a href="book.html" class="btn-primary">Start New Booking</a>
+            </div>
+
+            <!-- Success Content (Hidden) -->
+            <div class="hidden" id="success-state">
+                <div class="text-center mb-10">
+                    <div class="w-20 h-20 bg-sage text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-sage/20">
+                        <i data-lucide="check" class="w-10 h-10"></i>
+                    </div>
+                    <h1 class="text-4xl font-black mb-2">Booking Request Sent!</h1>
+                    <p class="text-gray-500 font-medium">Thank you for choosing BeePilot.</p>
+                </div>
+
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 mb-8 overflow-hidden relative">
+                    <div class="absolute top-0 right-0 p-6">
+                        <span id="status-chip" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-honey/10 text-honey">
+                            Awaiting Confirmation
+                        </span>
+                    </div>
+
+                    <div class="mb-8">
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Booking Code</p>
+                        <h2 class="text-2xl font-black flex items-center gap-2">
+                            <span id="display-ref">---</span>
+                            <button class="text-gray-300 hover:text-honey" onclick="copyRef()"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                        </h2>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-ivory flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-charcoal"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Route</p>
+                                <p class="font-bold"><span id="display-pickup">---</span> → <span id="display-dest">---</span></p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-ivory flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="calendar" class="w-4 h-4 text-charcoal"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Date & Time</p>
+                                <p class="font-bold" id="display-datetime">---</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                             <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Passengers</p>
+                                <p class="font-bold" id="display-pass">0</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase tracking-tighter">Service</p>
+                                <p class="font-bold" id="display-service">---</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-8 border-t border-gray-50">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-500 font-bold">Total Fare</span>
+                            <span class="text-2xl font-black" id="display-fare">UGX 0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 font-bold text-sm">Deposit Due (30%)</span>
+                            <span class="text-honey font-black" id="display-deposit">UGX 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Instructions -->
+                <div class="bg-charcoal text-white rounded-[2.5rem] p-8 mb-8">
+                    <h3 class="text-xl font-black mb-6 flex items-center gap-3">
+                        <i data-lucide="banknote" class="text-honey"></i> Payment Instructions
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
+                            <div>
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">MTN MoMo</p>
+                                <p class="font-bold">+256 772 000 000</p>
+                                <p class="text-[10px] text-gray-500">BeePilot Services Ltd</p>
+                            </div>
+                            <button class="text-gray-400 hover:text-honey"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
+                            <div>
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Airtel Money</p>
+                                <p class="font-bold">+256 701 000 000</p>
+                                <p class="text-[10px] text-gray-500">BeePilot Services Ltd</p>
+                            </div>
+                            <button class="text-gray-400 hover:text-honey"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
+                            <div>
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Stanbic Bank</p>
+                                <p class="font-bold">9030012345678</p>
+                                <p class="text-[10px] text-gray-500">Mbarara Branch</p>
+                            </div>
+                            <button class="text-gray-400 hover:text-honey"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                    <p class="mt-6 text-xs text-gray-500 italic text-center">
+                        Use your booking code <strong>BP-XXXXXX</strong> as payment reference.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <a id="whatsapp-link" href="#" class="btn-primary py-4">
+                        Chat on WhatsApp
+                    </a>
+                    <button class="btn-outline py-4 opacity-50 cursor-not-allowed" disabled>
+                        Download Receipt
+                    </button>
+                </div>
+                <p class="text-center text-[10px] text-gray-400 mt-4 italic">Receipt becomes available after deposit payment is confirmed.</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { BookingRepository } from './js/repositories/booking_repository.js';
+        import { formatCurrency, formatDate, formatTime, generateBookingMessage } from './js/utils/helpers.js';
+
+        lucide.createIcons();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingId = urlParams.get('id');
+        const repo = new BookingRepository();
+
+        const loading = document.getElementById('loading-state');
+        const error = document.getElementById('error-state');
+        const success = document.getElementById('success-state');
+
+        setTimeout(() => {
+            const booking = repo.getById(bookingId);
+            loading.classList.add('hidden');
+
+            if (!booking) {
+                error.classList.remove('hidden');
+                return;
+            }
+
+            success.classList.remove('hidden');
+            document.getElementById('display-ref').textContent = booking.id;
+            document.getElementById('display-pickup').textContent = booking.pickupLocation;
+            document.getElementById('display-dest').textContent = booking.destination;
+            document.getElementById('display-datetime').textContent = `${formatDate(booking.date)} at ${formatTime(booking.time)}`;
+            document.getElementById('display-pass').textContent = booking.passengers;
+            document.getElementById('display-service').textContent = booking.serviceType;
+            document.getElementById('display-fare').textContent = formatCurrency(booking.totalFare);
+            document.getElementById('display-deposit').textContent = formatCurrency(booking.depositAmount);
+
+            const message = generateBookingMessage(booking);
+            document.getElementById('whatsapp-link').href = `https://wa.me/256700000000?text=${encodeURIComponent(message)}`;
+
+            window.copyRef = () => {
+                navigator.clipboard.writeText(booking.id);
+                alert('Reference copied!');
+            };
+
+            lucide.createIcons();
+        }, 800);
+    </script>
+</body>
+</html>

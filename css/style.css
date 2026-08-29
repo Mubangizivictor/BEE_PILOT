@@ -12,6 +12,12 @@ body {
     background-color: var(--ivory);
     color: var(--charcoal);
     scroll-behavior: smooth;
+    font-size: 14px; /* Reduced from 16px */
+    line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
 }
 
 .bg-honey { background-color: var(--honey-gold); }
@@ -24,8 +30,8 @@ body {
     background-color: var(--honey-gold);
     color: var(--charcoal);
     font-weight: 700;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.75rem;
+    padding: 0.6rem 1.25rem; /* Reduced padding */
+    border-radius: 0.6rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
@@ -33,25 +39,27 @@ body {
     gap: 0.5rem;
     border: none;
     cursor: pointer;
+    font-size: 0.85rem;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(233, 181, 54, 0.3);
+    box-shadow: 0 4px 12px rgba(233, 181, 54, 0.2);
 }
 
 .btn-outline {
-    border: 2px solid var(--charcoal);
+    border: 1.5px solid var(--charcoal); /* Thinner border */
     color: var(--charcoal);
     font-weight: 700;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.75rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.6rem;
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     background: transparent;
+    font-size: 0.85rem;
 }
 
 .btn-outline:hover {
@@ -68,8 +76,8 @@ body {
 
 .card {
     background: white;
-    border-radius: 1.5rem;
-    padding: 2rem;
+    border-radius: 1rem; /* Slightly smaller radius */
+    padding: 1.5rem; /* Reduced padding */
     border: 1px solid rgba(16, 20, 23, 0.05);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
@@ -92,12 +100,13 @@ body {
 /* Form Inputs */
 input, select, textarea {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: 0.75rem;
+    padding: 0.6rem 0.9rem; /* Reduced padding */
+    border-radius: 0.6rem;
     border: 1px solid rgba(16, 20, 23, 0.1);
     background-color: white;
     transition: all 0.2s ease;
     font-family: inherit;
+    font-size: 0.9rem;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -108,8 +117,8 @@ input:focus, select:focus, textarea:focus {
 
 label {
     display: block;
-    font-size: 0.875rem;
+    font-size: 0.8rem; /* Reduced from 0.875rem */
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     color: var(--charcoal);
 }

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fare Settings | BeePilot Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-charcoal text-white hidden lg:flex flex-col fixed inset-y-0">
+        <div class="p-8">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-honey rounded-lg flex items-center justify-center">
+                    <i data-lucide="navigation" class="text-charcoal w-5 h-5"></i>
+                </div>
+                <span class="text-xl font-black tracking-tighter">BEEPILOT</span>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <a href="dashboard.html" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+            </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
+                <i data-lucide="calendar" class="w-5 h-5"></i> Bookings
+            </a>
+            <a href="fares.html" class="sidebar-link active bg-honey text-charcoal flex items-center gap-3 p-3 rounded-xl font-bold transition-all">
+                <i data-lucide="settings-2" class="w-5 h-5"></i> Fare Settings
+            </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-xl font-bold text-gray-400 hover:text-white transition-all">
+                <i data-lucide="map" class="w-5 h-5"></i> Fixed Routes
+            </a>
+        </nav>
+        <div class="p-4 border-t border-white/10">
+            <a href="login.html" class="flex items-center gap-3 p-3 text-gray-400 hover:text-white font-bold w-full">
+                <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 lg:ml-64 p-8">
+        <header class="flex justify-between items-center mb-12">
+            <div>
+                <h1 class="text-3xl font-black">Fare Settings</h1>
+                <p class="text-gray-500">Configure rates and pricing rules</p>
+            </div>
+            <button class="btn-primary py-2 px-6 shadow-lg shadow-honey/20">Save Changes</button>
+        </header>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Base Rates -->
+            <div class="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
+                <h3 class="text-lg font-black mb-6 flex items-center gap-2">
+                    <i data-lucide="gauge" class="text-honey"></i> Base & Distance Rates
+                </h3>
+                <div class="space-y-6">
+                    <div>
+                        <label>Minimum Town Fare (UGX)</label>
+                        <input type="number" value="10000" class="font-bold">
+                    </div>
+                    <div>
+                        <label>Base Fare (UGX)</label>
+                        <input type="number" value="5000" class="font-bold">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label>Rate per KM (Town)</label>
+                            <input type="number" value="2500" class="font-bold">
+                        </div>
+                        <div>
+                            <label>Rate per KM (Outstation)</label>
+                            <input type="number" value="3500" class="font-bold">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Special Hire Rates -->
+            <div class="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
+                <h3 class="text-lg font-black mb-6 flex items-center gap-2">
+                    <i data-lucide="award" class="text-honey"></i> Special Hire & Packages
+                </h3>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label>Half-Day Price (UGX)</label>
+                            <input type="number" value="250000" class="font-bold">
+                        </div>
+                        <div>
+                            <label>Full-Day Price (UGX)</label>
+                            <input type="number" value="450000" class="font-bold">
+                        </div>
+                    </div>
+                    <div>
+                        <label>Included Hours (Full Day)</label>
+                        <input type="number" value="12" class="font-bold">
+                    </div>
+                    <div>
+                        <label>Overtime Charge per Hour (UGX)</label>
+                        <input type="number" value="30000" class="font-bold">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Extras & Deposit -->
+            <div class="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
+                <h3 class="text-lg font-black mb-6 flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="text-honey"></i> Extras & Deposits
+                </h3>
+                <div class="space-y-6">
+                    <div>
+                        <label>Default Deposit (%)</label>
+                        <input type="number" value="30" class="font-bold">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label>Night Surcharge (%)</label>
+                            <input type="number" value="15" class="font-bold">
+                        </div>
+                        <div>
+                            <label>Waiting Charge / 15m (UGX)</label>
+                            <input type="number" value="5000" class="font-bold">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculator Preview -->
+            <div class="bg-charcoal text-white rounded-[2rem] p-8 shadow-xl">
+                <h3 class="text-lg font-black mb-6 text-honey">Fare Calculator Preview</h3>
+                <div class="space-y-4 mb-8">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Formula:</span>
+                        <span class="font-mono text-[10px]">Base + (KM * Rate) + Extras</span>
+                    </div>
+                    <div class="flex justify-between font-bold">
+                        <span>Estimated Fare</span>
+                        <span class="text-honey">UGX 35,000</span>
+                    </div>
+                </div>
+                <div class="p-4 bg-white/5 rounded-xl border border-white/10 text-xs text-gray-400">
+                    Calculated prices are rounded to the nearest 500 UGX.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        lucide.createIcons();
+    </script>
+</body>
+</html>
