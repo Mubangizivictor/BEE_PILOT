@@ -1,0 +1,11 @@
+name = "bee-pilot"
+main = "src/index.ts"
+compatibility_date = "2026-08-29"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "beepilot-db"
+database_id = "04c9780f-87f0-4a5d-8776-b6aa8b60e2c4"
+
+[vars]
+PUBLIC_ORIGIN = "https://rides.victorbee.com"
