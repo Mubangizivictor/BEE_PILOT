@@ -13,5 +13,6 @@ export const CONFIG = {
     AIRTEL_MONEY: '0740116746',
     BANK_ACCOUNT: '3205381235',
     BANK_NAME: 'Centenary Bank',
-    ACCOUNT_NAME: 'Victor Mubangizi'
+    ACCOUNT_NAME: 'Victor Mubangizi',
+    EMAIL: 'mubangizivic@gmail.com'
 };
