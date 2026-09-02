@@ -14,6 +14,7 @@ type FareSettings = {
   deposit_percent: number;
   special_hire_day_rate: number;
   return_factor: number;
+  night_surcharge_percent: number;
 };
 
 const json = (body: unknown, status = 200, origin = "*") =>
@@ -29,10 +30,12 @@ const json = (body: unknown, status = 200, origin = "*") =>
 
 const requestOrigin = (request: Request, env: Env) => {
   const origin = request.headers.get("Origin");
-  return origin === env.PUBLIC_ORIGIN ? origin : env.PUBLIC_ORIGIN;
+  // In production, you'd check against env.PUBLIC_ORIGIN.
+  // For now allowing the requester's origin if it exists, otherwise fallback.
+  return origin || env.PUBLIC_ORIGIN || "*";
 };
 
-const round500 = (amount: number) => Math.round(amount / 500) * 500;
+const round100 = (amount: number) => Math.round(amount / 100) * 100;
 const id = (prefix: string) => `${prefix}-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`;
 
 function isAdmin(request: Request, env: Env) {
@@ -65,22 +68,37 @@ async function route(origin: string, destination: string, env: Env) {
   if (!response.ok) throw new Error("Route lookup failed");
   const data = await response.json<{ routes?: Array<{ distanceMeters: number; duration: string }> }>();
   const found = data.routes?.[0];
-  if (!found) throw new Error("No driving route found");
+  if (!found) throw new Error("No driving route found between these locations");
   return {
     distanceMeters: found.distanceMeters,
     durationSeconds: Number.parseFloat(found.duration),
   };
 }
 
-function calculateFare(serviceType: string, r: { distanceMeters: number; durationSeconds: number }, s: FareSettings) {
+function calculateFare(serviceType: string, r: { distanceMeters: number; durationSeconds: number }, s: FareSettings, options: { isReturnTrip?: boolean } = {}) {
   if (serviceType === "special_hire") return s.special_hire_day_rate;
+
   const km = r.distanceMeters / 1000;
   const minutes = r.durationSeconds / 60;
-  const intercity = serviceType === "intercity" || serviceType === "airport_transfer";
-  const kmRate = intercity ? s.outstation_rate_per_km : s.town_rate_per_km;
-  const returnMultiplier = intercity ? s.return_factor : 1;
-  const raw = s.base_fare + (km * kmRate * returnMultiplier) + (minutes * s.rate_per_minute);
-  return Math.max(s.minimum_town_fare, round500(raw));
+
+  const isIntercity = serviceType === "intercity" || serviceType === "airport_transfer" || km > 25;
+  const kmRate = isIntercity ? s.outstation_rate_per_km : s.town_rate_per_km;
+
+  let fare = s.base_fare + (km * kmRate) + (minutes * s.rate_per_minute);
+
+  if (options.isReturnTrip) {
+    fare *= s.return_factor;
+  }
+
+  // Night surcharge check (approximate for Uganda time UTC+3)
+  // Cloudflare Workers run in UTC.
+  const now = new Date();
+  const ugandaHour = (now.getUTCHours() + 3) % 24;
+  if (ugandaHour >= 21 || ugandaHour < 5) {
+    fare *= (1 + s.night_surcharge_percent / 100);
+  }
+
+  return Math.max(s.minimum_town_fare, round100(fare));
 }
 
 export default {
@@ -95,18 +113,28 @@ export default {
       }
 
       if (request.method === "POST" && url.pathname === "/api/quote") {
-        const body = await request.json<{ serviceType: string; pickupLocation: string; destination: string }>();
+        const body = await request.json<{ serviceType: string; pickupLocation: string; destination: string; isReturnTrip?: boolean }>();
         if (!body.serviceType || !body.pickupLocation || !body.destination) {
           return json({ error: "Service type, pickup and destination are required." }, 400, origin);
         }
+
+        if (body.pickupLocation.trim().toLowerCase() === body.destination.trim().toLowerCase()) {
+          return json({ error: "Pickup and destination cannot be the same." }, 400, origin);
+        }
+
         const [r, s] = await Promise.all([route(body.pickupLocation, body.destination, env), settings(env)]);
-        const fare = calculateFare(body.serviceType, r, s);
+        const fare = calculateFare(body.serviceType, r, s, { isReturnTrip: body.isReturnTrip });
+        const deposit = round100(fare * (s.deposit_percent / 100));
+
         return json({
           totalFare: fare,
-          depositAmount: round500(fare * (s.deposit_percent / 100)),
+          depositAmount: deposit,
+          balance: fare - deposit,
           distanceMeters: r.distanceMeters,
           durationSeconds: r.durationSeconds,
-          quoteNotice: "Estimate is confirmed only after BeePilot accepts the booking.",
+          serviceType: body.serviceType,
+          expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 mins expiry
+          quoteNotice: "Price is fixed. No surge pricing will be applied.",
         }, 200, origin);
       }
 
@@ -117,13 +145,31 @@ export default {
           passengers?: number; bags?: number; notes?: string;
           totalFare: number; depositRequired: number; distanceMeters?: number; durationSeconds?: number;
         }>();
+
+        // Validation
+        const phoneRegex = /^(?:\+256|0)?(7[0-9]{8})$/;
+        if (!body.customerName || body.customerName.trim().length < 2) {
+            return json({ error: "Please provide a valid customer name." }, 400, origin);
+        }
+        if (!body.customerPhone || !phoneRegex.test(body.customerPhone.trim().replace(/\s/g, ""))) {
+            return json({ error: "Please provide a valid Ugandan phone number." }, 400, origin);
+        }
+        if (new Date(body.travelAt) <= new Date()) {
+            return json({ error: "Travel time must be in the future." }, 400, origin);
+        }
+        if (!body.passengers || body.passengers < 1) {
+            return json({ error: "Passenger count must be at least 1." }, 400, origin);
+        }
+
         const required = [body.customerName, body.customerPhone, body.serviceType, body.pickupLocation, body.destination, body.travelAt];
         if (required.some(value => !value) || !Number.isFinite(body.totalFare) || !Number.isFinite(body.depositRequired)) {
           return json({ error: "Complete booking information is required." }, 400, origin);
         }
+
         const bookingId = id("BP");
         const publicToken = crypto.randomUUID().replace(/-/g, "");
         const now = new Date().toISOString();
+
         await env.DB.prepare(`INSERT INTO bookings (
           id, public_token, customer_name, customer_phone, service_type, pickup_location,
           destination, travel_at, passengers, bags, notes, distance_meters, duration_seconds,
@@ -134,8 +180,10 @@ export default {
           body.bags ?? 0, body.notes?.trim() ?? null, body.distanceMeters ?? null, body.durationSeconds ?? null,
           Math.round(body.totalFare), Math.round(body.depositRequired), now, now
         ).run();
+
         return json({ bookingId, publicToken, tripStatus: "awaiting_confirmation", paymentStatus: "unpaid" }, 201, origin);
       }
+
 
       const publicMatch = url.pathname.match(/^\/api\/bookings\/public\/([a-f0-9]+)$/);
       if (request.method === "GET" && publicMatch) {

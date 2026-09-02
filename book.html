@@ -185,9 +185,9 @@
                                     <label class="form-label" for="serviceType">Ride Type</label>
                                     <select id="serviceType" class="form-input">
                                         <option value="standard">Standard Ride</option>
-                                        <option value="airportTransfer">Airport Transfer</option>
+                                        <option value="airport_transfer">Airport Transfer</option>
                                         <option value="intercity">Intercity Trip</option>
-                                        <option value="specialHire">Special Hire</option>
+                                        <option value="special_hire">Special Hire</option>
                                         <option value="family">Family Travel</option>
                                         <option value="corporate">Corporate</option>
                                     </select>
@@ -396,7 +396,15 @@
                 const updateRoute = async () => {
                     const pickup = document.getElementById('pickupLocation').value;
                     const dest = document.getElementById('destination').value;
+                    const serviceType = document.getElementById('serviceType').value;
+
                     if (!pickup || !dest) return;
+
+                    if (pickup.trim().toLowerCase() === dest.trim().toLowerCase()) {
+                        document.getElementById('error-message').textContent = "Pickup and destination cannot be the same.";
+                        document.getElementById('error-state').classList.remove('hidden');
+                        return;
+                    }
 
                     document.getElementById('map-preview-empty').classList.add('hidden');
                     document.getElementById('map-mobile-wrapper').classList.add('is-shimmering');
@@ -406,6 +414,7 @@
                     submitBtn.disabled = true;
 
                     try {
+                        // 1. Get Directions for preview
                         const response = await directionsService.route({
                             origin: pickup, destination: dest, travelMode: 'DRIVING'
                         });
@@ -413,26 +422,24 @@
                         directionsRenderer.setDirections(response);
                         mobileRenderer.setDirections(response);
 
-                        const route = response.routes[0].legs[0];
-                        const quote = await quoteService.calculateQuote(
-                            document.getElementById('serviceType').value,
-                            route.distance.value / 1000,
-                            route.duration.value / 60
-                        );
+                        // 2. Get authoritative quote from Backend
+                        const quote = await quoteService.getQuote(serviceType, pickup, dest);
 
                         document.getElementById('display-fare').textContent = formatCurrency(quote.totalFare);
-                        document.getElementById('display-distance').textContent = `${quote.distanceKm} km`;
-                        document.getElementById('display-duration').textContent = `${quote.durationMins} mins`;
+                        document.getElementById('display-distance').textContent = `${(quote.distanceMeters / 1000).toFixed(1)} km`;
+                        document.getElementById('display-duration').textContent = `${Math.round(quote.durationSeconds / 60)} mins`;
 
                         document.getElementById('quote-area').classList.remove('hidden');
                         window.currentQuote = quote;
                     } catch (e) {
+                        console.error("Route/Quote error:", e);
+                        document.getElementById('error-message').textContent = e.message || "Unable to calculate route. Try a different address.";
                         document.getElementById('error-state').classList.remove('hidden');
                         document.getElementById('map-preview-empty').classList.remove('hidden');
                     } finally {
                         document.getElementById('loading-state').classList.add('hidden');
                         document.getElementById('map-mobile-wrapper').classList.remove('is-shimmering');
-                        submitBtn.disabled = !navigator.onLine ? true : false;
+                        submitBtn.disabled = !navigator.onLine;
                     }
                 };
 
@@ -486,28 +493,70 @@
 
         document.getElementById('booking-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!window.currentQuote && !window.mapsUnavailable) {
-                alert("Please select pickup and destination first.");
+
+            if (Number(bookingForm.dataset.activeStep) === 1) {
+                // If user hits enter on step 1, we should try to get quote and move to step 2
+                const pickup = document.getElementById('pickupLocation').value;
+                const dest = document.getElementById('destination').value;
+                if (!pickup || !dest) return;
+                if (!window.currentQuote) await updateRoute();
+                if (window.currentQuote) setStep(2);
                 return;
             }
 
-            const booking = {
-                id: bookingRepo.generateId(),
-                customerName: document.getElementById('customerName').value,
-                customerPhone: document.getElementById('customerPhone').value,
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim().replace(/\s/g, "");
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            // Frontend Validation
+            if (customerName.length < 2) {
+                alert("Please enter a valid name.");
+                return;
+            }
+            const phoneRegex = /^(?:\+256|0)?(7[0-9]{8})$/;
+            if (!phoneRegex.test(customerPhone)) {
+                alert("Please enter a valid Ugandan phone number (e.g., 0772123456).");
+                return;
+            }
+
+            const travelAt = new Date(`${date}T${time}`);
+            if (travelAt <= new Date()) {
+                alert("Travel time must be in the future.");
+                return;
+            }
+
+            if (!window.currentQuote) {
+                alert("Please wait for the fare to be calculated.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Processing...";
+
+            const bookingData = {
+                customerName,
+                customerPhone,
                 pickupLocation: document.getElementById('pickupLocation').value,
                 destination: document.getElementById('destination').value,
-                date: document.getElementById('date').value,
-                time: document.getElementById('time').value,
-                passengers: document.getElementById('passengers').value,
-                bags: document.getElementById('bags').value,
+                travelAt: travelAt.toISOString(),
+                passengers: parseInt(document.getElementById('passengers').value) || 1,
+                bags: parseInt(document.getElementById('bags').value) || 0,
                 serviceType: document.getElementById('serviceType').value,
                 notes: document.getElementById('notes').value,
-                ...window.currentQuote
+                totalFare: window.currentQuote.totalFare,
+                depositRequired: window.currentQuote.depositAmount,
+                distanceMeters: window.currentQuote.distanceMeters,
+                durationSeconds: window.currentQuote.durationSeconds
             };
 
-            // Save to IndexedDB/LocalStorage for persistence
-            localStorage.setItem('pending_booking', JSON.stringify(booking));
+            // Save for confirmation page
+            localStorage.setItem('pending_booking', JSON.stringify({
+                ...bookingData,
+                date,
+                time,
+                depositAmount: window.currentQuote.depositAmount
+            }));
             window.location.href = 'booking-confirmation.html';
         });
 

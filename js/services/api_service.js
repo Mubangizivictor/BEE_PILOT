@@ -8,42 +8,49 @@ export class ApiService {
             ...options.headers
         };
 
-        const response = await fetch(url, { ...options, headers });
-        if (!response.ok) {
-            const error = await response.text();
-            throw new Error(error || 'API Request Failed');
+        try {
+            const response = await fetch(url, { ...options, headers });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'API Request Failed');
+            }
+            return data;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
         }
-        return response.json();
     }
 
-    static async getBooking(id) {
-        return this.request(`/bookings/${id}`);
-    }
-
-    static async createBooking(data) {
-        return this.request('/bookings', {
+    static async getQuote(quoteRequest) {
+        return this.request('/api/quote', {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(quoteRequest)
         });
     }
 
-    static async adminLogin(pin) {
-        return this.request('/admin/login', {
+    static async createBooking(bookingData) {
+        return this.request('/api/bookings', {
             method: 'POST',
-            body: JSON.stringify({ pin })
+            body: JSON.stringify(bookingData)
         });
     }
 
+    static async getPublicBooking(token) {
+        return this.request(`/api/bookings/public/${token}`);
+    }
+
+    // Admin endpoints
     static async getAdminBookings() {
         const token = sessionStorage.getItem('bp_admin_token');
-        return this.request('/admin/bookings', {
+        return this.request('/api/admin/bookings', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
     }
 
-    static async confirmPayment(paymentData) {
+    static async recordPayment(bookingId, paymentData) {
         const token = sessionStorage.getItem('bp_admin_token');
-        return this.request('/admin/payments/confirm', {
+        return this.request(`/api/admin/bookings/${bookingId}/payments`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` },
             body: JSON.stringify(paymentData)

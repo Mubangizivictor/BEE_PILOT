@@ -112,23 +112,23 @@
         import { formatCurrency, formatDate, formatTime } from './js/utils/helpers.js';
 
         const params = new URLSearchParams(window.location.search);
-        const bookingId = params.get('id');
+        const token = params.get('token');
 
         async function load() {
             lucide.createIcons();
-            if (!bookingId) return window.location.href = 'index.html';
+            if (!token) return window.location.href = 'index.html';
 
             try {
-                const booking = await ApiService.getBooking(bookingId);
+                const booking = await ApiService.getPublicBooking(token);
 
                 document.getElementById('status-desc').textContent = `Ref: #${booking.id}`;
-                document.getElementById('client-name').textContent = booking.customerName;
-                document.getElementById('travel-date').textContent = `${formatDate(booking.date)} @ ${formatTime(booking.time)}`;
-                document.getElementById('pickup').textContent = booking.pickupLocation;
+                document.getElementById('client-name').textContent = booking.customer_name;
+                document.getElementById('travel-date').textContent = `${formatDate(booking.travel_at.split('T')[0])} @ ${formatTime(booking.travel_at.split('T')[1].slice(0, 5))}`;
+                document.getElementById('pickup').textContent = booking.pickup_location;
                 document.getElementById('destination').textContent = booking.destination;
-                document.getElementById('total-fare').textContent = formatCurrency(booking.totalFare);
+                document.getElementById('total-fare').textContent = formatCurrency(booking.total_fare);
 
-                if (booking.status === 'confirmed') {
+                if (booking.trip_status === 'confirmed' || booking.payment_status === 'paid_in_full') {
                     document.getElementById('status-icon').innerHTML = '<i data-lucide="check-circle" class="text-green-500 w-8 h-8"></i>';
                     document.getElementById('status-title').textContent = 'Booking Confirmed';
                     document.getElementById('payment-text').textContent = 'PAID & VERIFIED';
@@ -138,7 +138,7 @@
                 }
 
                 document.getElementById('whatsapp-status-btn').onclick = () => {
-                    const msg = `🐝 *BOOKING STATUS CHECK*\nRef: ${booking.id}\nStatus: ${booking.status.toUpperCase()}\n\nI am checking on my ride for ${formatDate(booking.date)}.`;
+                    const msg = `🐝 *BOOKING STATUS CHECK*\nRef: ${booking.id}\nStatus: ${booking.trip_status.toUpperCase()}\n\nI am checking on my ride for ${formatDate(booking.travel_at.split('T')[0])}.`;
                     window.open(`${CONFIG.WHATSAPP_LINK}?text=${encodeURIComponent(msg)}`, '_blank');
                 };
 
@@ -153,7 +153,7 @@
             const element = document.getElementById('receipt-content');
             const opt = {
                 margin: 0.5,
-                filename: `BeePilot-Receipt-${bookingId}.pdf`,
+                filename: `BeePilot-Receipt-${token}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }

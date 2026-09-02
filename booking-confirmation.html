@@ -196,7 +196,7 @@
                     <p class="text-[10px] text-text-muted">Acc Name: ${CONFIG.ACCOUNT_NAME}</p>
                 </div>`;
             }
-            html += `<p class="text-[10px] italic text-gold font-bold">Ref: ${booking.id}</p>`;
+            html += `<p class="text-[10px] italic text-gold font-bold">Ref: Processing...</p>`;
             target.innerHTML = html;
         }
 
@@ -212,11 +212,11 @@
                 booking.paymentMethod = method;
 
                 // 1. Backend Save
-                const { success, token } = await ApiService.createBooking(booking);
+                const { bookingId, publicToken } = await ApiService.createBooking(booking);
 
                 // 2. WhatsApp Deep Link
                 const message = `🐝 *NEW BEEPILOT BOOKING*\n\n` +
-                    `Ref: ${booking.id}\n` +
+                    `Ref: ${bookingId}\n` +
                     `Client: ${booking.customerName}\n` +
                     `Phone: ${booking.customerPhone}\n\n` +
                     `📍 From: ${booking.pickupLocation}\n` +
@@ -233,8 +233,9 @@
                 window.open(`${CONFIG.WHATSAPP_LINK}?text=${encodeURIComponent(message)}`, '_blank');
 
                 // 3. Status Page
-                window.location.href = `receipt.html?id=${booking.id}&token=${token}`;
+                window.location.href = `receipt.html?token=${publicToken}`;
             } catch (e) {
+                console.error(e);
                 alert("Connection error. Please try again.");
                 btn.disabled = false;
                 btn.textContent = "Confirm & Open WhatsApp";
